@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
-function Index(setUser) {
+function Index() {
+  const { user, setUser } = useOutletContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/hub");
+    }
+  }, [user]);
+
   async function login() {
     try {
       const res = await fetch("http://localhost:5000/", {
