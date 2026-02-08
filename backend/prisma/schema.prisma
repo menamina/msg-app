@@ -11,6 +11,7 @@ model User {
   name String
   email String @unique
   saltedHash String
+  profile Profile?
 
   sent Message [] @relation("From")
   received Message [] @relation("To")
@@ -27,4 +28,11 @@ model Message {
 
   fromUser User @relation("From", fields: [from], references: [id])
   toUser User @relation("To", fields: [to], references: [id])
+}
+
+model Profile {
+  id Int @id @default(autoincrement())
+  user Int @unique
+
+  prof User @relation(fields: [user], references:[id])
 }
