@@ -4,13 +4,29 @@ const remote = require("../controls/remote");
 const validators = require("../middleware/validators");
 const passport = require("../passport/passport");
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/hub",
-    failureRedirect: "/login",
-  }),
-);
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+
+    if (!user) {
+      return res.status(401).json({
+        message: info.message,
+      });
+    }
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+
+      return res.json({
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      });
+    });
+  })(req, res, next);
+});
+
 router.post("/signup", validators, remote.signUp);
 router.post("/signout", (req, res, next) => {
   req.logout((err) => {

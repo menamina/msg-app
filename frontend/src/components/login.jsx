@@ -34,6 +34,8 @@ function Index() {
   return (
     <div className="indexDiv">
       <div>
+        {emailErr ? <div>{emailErr}</div> : null}
+        {passErr ? <div>{passErr}</div> : null}
         <form onSubmit={login}>
           <div>
             <label>Email:</label>
