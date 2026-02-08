@@ -5,17 +5,13 @@ function Index() {
   const { user, setUser } = useOutletContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      navigate("/hub");
-    }
-  }, [user]);
+  const [emailErr, setEmailErr] = useState("");
+  const [passErr, setPassErr] = useState("");
+  // const navigate = useNavigate();
 
   async function login() {
     try {
-      const res = await fetch("http://localhost:5000/", {
+      const res = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -26,6 +22,9 @@ function Index() {
       const data = await res.json();
       if (!res.ok) {
         return;
+      } else {
+        setUser(data.user);
+        console.log(user);
       }
     } catch (error) {
       console.log(error);

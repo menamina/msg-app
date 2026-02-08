@@ -1,28 +1,45 @@
-const express = require("express");
-const router = express.Router();
-const remote = require("../controls/remote");
-const validators = require("../middleware/validators");
-const passport = require("../passport/passport");
+const prisma = require("../prisma/client");
+const { createPassword } = require("../middleware/password");
 
-router.post(
-  "/login",
-  passport.authicate("local", {
-    successRedirect: "/hub",
-    failureRedirect: "/login",
-  }),
-);
-router.post("/signup", validators, remote.signUp);
-router.post("/signout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
+async function findByEmail(req, res) {
+  try {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    if (user) {
+      return res.json({
+        user,
+      });
+    } else {
+      return res.json({ message: "no user found with that email " });
     }
-    res.redirect("/");
-  });
-});
+  } catch (error) {
+    console.log(`error @ findByEmail controller: ${error.message}`);
+  }
+}
 
-// home route will be REST API
-// login + sign up REST API
-// logout REST API?
+async function signUp(req, res) {
+  try {
+    const { name, email, password } = req.body;
+    const passHash = createPassword(password);
 
-// everything else : http api ??
+    await prisma.user.create({
+      data: {
+        name: name,
+        email: email,
+        saltedHash: passHash,
+      },
+    });
+    res.status(200);
+  } catch (error) {
+    console.log(`error @ signUp controller: ${error.message}`);
+  }
+}
+
+module.exports = {
+  signUp,
+  findByEmail,
+};

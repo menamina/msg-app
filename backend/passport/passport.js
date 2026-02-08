@@ -12,8 +12,8 @@ function verifyCB(email, password, done) {
       if (!user) {
         return done(null, false, { message: "invalid email" });
       }
-      const validatePassword = checkPassword(password, user.saltedHash);
-      if (!validatePassword) {
+      const match = checkPassword(password, user.saltedHash);
+      if (!match) {
         return done(null, false, { message: "invalid password" });
       }
       return done(null, user);
