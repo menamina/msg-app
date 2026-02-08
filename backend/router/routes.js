@@ -4,6 +4,8 @@ const remote = require("../controls/remote");
 const validators = require("../middleware/validators");
 const passport = require("../passport/passport");
 
+router.post("/signup", validators, remote.signUp);
+
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
@@ -27,7 +29,6 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-router.post("/signup", validators, remote.signUp);
 router.post("/signout", (req, res, next) => {
   req.logout((err) => {
     if (err) {

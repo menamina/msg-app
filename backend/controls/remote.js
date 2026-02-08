@@ -1,6 +1,24 @@
 const prisma = require("../prisma/client");
 const { createPassword } = require("../middleware/password");
 
+async function signUp(req, res) {
+  try {
+    const { name, email, password } = req.body;
+    const passHash = createPassword(password);
+
+    await prisma.user.create({
+      data: {
+        name: name,
+        email: email,
+        saltedHash: passHash,
+      },
+    });
+    res.status(200);
+  } catch (error) {
+    console.log(`error @ signUp controller: ${error.message}`);
+  }
+}
+
 async function findByEmail(req, res) {
   try {
     const { email } = req.body;
@@ -21,25 +39,10 @@ async function findByEmail(req, res) {
   }
 }
 
-async function signUp(req, res) {
-  try {
-    const { name, email, password } = req.body;
-    const passHash = createPassword(password);
-
-    await prisma.user.create({
-      data: {
-        name: name,
-        email: email,
-        saltedHash: passHash,
-      },
-    });
-    res.status(200);
-  } catch (error) {
-    console.log(`error @ signUp controller: ${error.message}`);
-  }
-}
+async function getUserProfile(req, res) {}
 
 module.exports = {
   signUp,
   findByEmail,
+  getUserProfile,
 };

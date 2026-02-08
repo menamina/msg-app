@@ -7,7 +7,7 @@ function Index() {
   const [password, setPassword] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const [passErr, setPassErr] = useState("");
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   async function login() {
     try {
@@ -21,10 +21,13 @@ function Index() {
       });
       const data = await res.json();
       if (!res.ok) {
-        return;
+        data.message === "invalid email"
+          ? setEmailErr("Invalid email")
+          : setPassErr("Invalid password");
       } else {
         setUser(data.user);
         console.log(user);
+        navigate("/hub");
       }
     } catch (error) {
       console.log(error);
