@@ -3,8 +3,13 @@ const router = express.Router();
 const remote = require("../controls/remote");
 const validators = require("../middleware/validators");
 const passport = require("../passport/passport");
+const isAuth = require("../middleware/isAuth");
 
 router.post("/signup", validators, remote.signUp);
+
+router.get("/isThereASession", isAuth, (req, res) => {
+  res.json({ user: req.user });
+});
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -16,7 +21,7 @@ router.post("/login", (req, res, next) => {
       });
     }
 
-    req.logIn(user, (err) => {
+    req.login(user, (err) => {
       if (err) return next(err);
 
       return res.json({
@@ -35,14 +40,10 @@ router.post("/signout", (req, res, next) => {
     if (err) {
       return next(err);
     }
+    res.clearCookie("connect.sid");
     res.redirect("/");
   });
 });
 
 router.get("/hub", isAuth, remote.getUserProfile);
-
-// home route will be REST API
-// login + sign up REST API
-// logout REST API?
-
-// everything else : http api ??
+router.post("/sendMsg", isAuth, remote.sendMsg);

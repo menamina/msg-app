@@ -1,14 +1,4 @@
-import { useEffect } from "react";
-import { useNavigate, useOutletContext, Link } from "react-router-dom";
-
 function Index() {
-  const { user } = useOutletContext();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (user) {
-      navigate("/hub");
-    }
-  }, [user]);
   return (
     <div className="index div">
       <div>

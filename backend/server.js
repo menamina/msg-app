@@ -21,6 +21,9 @@ server.use(
   }),
 );
 
+server.use(passport.initialize());
+server.use(passport.session());
+
 server.use(express.urlencoded({ extended: false }));
 server.use("/", routes);
 
