@@ -22,6 +22,7 @@ router.post("/login", (req, res, next) => {
       return res.json({
         user: {
           id: user.id,
+          name: user.name,
           email: user.email,
         },
       });
@@ -37,6 +38,8 @@ router.post("/signout", (req, res, next) => {
     res.redirect("/");
   });
 });
+
+router.get("/hub", isAuth, remote.getUserProfile);
 
 // home route will be REST API
 // login + sign up REST API
