@@ -2,11 +2,18 @@ import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Signup() {
+  const { user } = useOutletContext();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/hub");
+    }
+  }, [user]);
 
   async function signupAPI() {
     try {
@@ -68,6 +75,10 @@ function Signup() {
           />
         </div>
       </form>
+      <div>
+        <div>Already have an account?</div>
+        <Link to="/login">login</Link>
+      </div>
     </div>
   );
 }

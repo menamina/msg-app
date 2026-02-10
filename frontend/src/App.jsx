@@ -7,7 +7,7 @@ function App() {
   const [msgSent, setMsgSent] = useState(null);
   return (
     <div className="godDiv">
-      <Index />
+      <Index user={user} />
       <Outlet
         context={{
           user,
