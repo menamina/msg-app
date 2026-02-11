@@ -19,9 +19,9 @@ const routes = createBrowserRouter([
         path: "/hub",
         element: <Hub />,
         children: [
-          { path: "new", element: <NewMsg /> },
-          { path: "chat/:id", element: <Chat /> },
-          { path: "profile", element: <Profile /> },
+          { path: "/new", element: <NewMsg /> },
+          { path: "/chat/:id", element: <Chat /> },
+          { path: "/profile", element: <Profile /> },
         ],
       },
     ],
