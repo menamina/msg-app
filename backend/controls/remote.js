@@ -4,17 +4,26 @@ const createPassword = require("../middleware/password");
 async function signUp(req, res) {
   try {
     const { name, email, password } = req.body;
-    const passHash = await createPassword.createPassword(password);
 
-    await prisma.user.create({
-      data: {
-        name,
-        email,
-        saltedHash: passHash,
-      },
+    const emailInUse = await prisma.user.findUnique({
+      where: { email: email },
     });
 
-    return res.status(201);
+    if (!emailInUse) {
+      const passHash = await createPassword.createPassword(password);
+
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          saltedHash: passHash,
+        },
+      });
+
+      return res.status(200).json({ success: true });
+    } else {
+      return res.status(401).json({ message: "Email is taken" });
+    }
   } catch (error) {
     console.log(`error @ signUp controller: ${error.message}`);
     return res.status(500).json({ message: "failed to create user" });
