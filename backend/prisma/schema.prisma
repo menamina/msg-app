@@ -15,6 +15,7 @@ model User {
 
   sent Message [] @relation("From")
   received Message [] @relation("To")
+  friends Friends []
 
 }
 
@@ -30,9 +31,21 @@ model Message {
   toUser User @relation("To", fields: [to], references: [id])
 }
 
+model Friends {
+  id Int @id @default(autoincrement())
+  contactID Int
+  name String
+  email String
+
+  friendID User @relation(fields: [contactID], references: [id])
+
+}
+
 model Profile {
   id Int @id @default(autoincrement())
   user Int @unique
+  email String @unique
+  updatedPassword String 
 
   prof User @relation(fields: [user], references:[id])
 }

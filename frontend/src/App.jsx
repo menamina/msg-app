@@ -3,8 +3,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
   const [msgs, setMsgs] = useState([]);
-  const [msgSent, setMsgSent] = useState(null);
+  const [msgsSent, setMsgSent] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,16 +24,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      // get messages in hub + set them + user profile settings + set user profile settings
-      navigate("/hub");
-    }
-  }, [user]);
-
-  useEffect(() => {
     async function getMsgs() {
       try {
-        const res = await fetch("http://localhost:5555/getMsgs", {
+        const res = await fetch("http://localhost:5555/getUserProfile", {
           method: "GET",
           credentials: "include",
         });
@@ -40,7 +34,10 @@ function App() {
         if (!res.ok) {
           return console.log("something");
         }
-        setMsgs(//st the objs here send back the fromUser + msg + time + date);
+        setUserProfile(data.userInfo.profile);
+        setMsgs(data.userInfo.received);
+        setMsgSent(data.userInfo.sent);
+        navigate("/hub");
       } catch (err) {
         console.log(err);
       }
@@ -54,8 +51,12 @@ function App() {
         context={{
           user,
           setUser,
-          msgSent,
+          msgsSent,
           setMsgSent,
+          msgs,
+          setMsgs,
+          userProfile,
+          setUserProfile,
         }}
       ></Outlet>
     </div>

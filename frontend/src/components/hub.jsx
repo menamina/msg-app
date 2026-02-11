@@ -7,7 +7,7 @@ function Hub() {
   // add a friend -- delete a friend
   // delete messages -- in backend save messages as false if deleted
   // restore deleted msgs
-  const { user } = useOutletContext();
+  const { user, msgs, msgsSent, userProfile } = useOutletContext();
   const { showOpts, setShowOpts } = useState(false);
   function profileOpts() {}
 

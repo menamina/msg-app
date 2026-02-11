@@ -47,7 +47,32 @@ async function findByEmail(req, res) {
   }
 }
 
-async function getUserProfile(req, res) {}
+async function getUserProfile(req, res) {
+  try {
+    if (req.user){
+      return res.status(401).json({message: "no user"})
+    } else {
+      const userProfSettings = await prisma.user.findUnique({
+        where: {
+          email: req.user.email
+        },
+        include: {
+          profile: true,
+          sent: true,
+          received: true,
+          friends: true
+        }
+      })
+
+      if (!userProfSettings){
+        return res.send(401).status({message: "no user found"})
+      } else {
+        res.json({userInfo: userProfSettings})
+      }
+    }
+  }
+}
+
 
 module.exports = {
   signUp,
