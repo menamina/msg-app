@@ -2,12 +2,21 @@ require("dotenv").config();
 
 const express = require("express");
 const server = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5555;
 const routes = require("./router/routes");
 const pool = require("./passport/pool");
+const passport = require("./passport/passport");
+const cors = require("cors");
 
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
+
+server.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 server.use(
   session({
