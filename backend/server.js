@@ -18,6 +18,9 @@ server.use(
   }),
 );
 
+server.use(express.json());
+server.use(express.urlencoded({ extended: false }));
+
 server.use(
   session({
     store: new pgSession({
@@ -33,7 +36,6 @@ server.use(
 server.use(passport.initialize());
 server.use(passport.session());
 
-server.use(express.urlencoded({ extended: false }));
 server.use("/", routes);
 
 function err(error) {

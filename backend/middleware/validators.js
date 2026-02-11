@@ -1,7 +1,7 @@
 const { body, validationResult } = require("express-validator");
 
 const validator = [
-  body("name").notEmpty().withMessage("Name is required"),
+  body("name").notEmpty().withMessage("Name isfff required"),
 
   body("email")
     .trim()
@@ -14,7 +14,7 @@ const validator = [
     .notEmpty()
     .withMessage("Password is required")
     .isLength({ min: 8 })
-    .withMessage("Email must be at least 8 characters"),
+    .withMessage("Password must be at least 8 characters"),
 
   body("confirmPassword").custom((value, { req }) => {
     if (value !== req.body.password) {
