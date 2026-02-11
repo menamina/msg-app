@@ -7,6 +7,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const [signUpErrs, setSignUpErrs] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,22 +16,34 @@ function Signup() {
     }
   }, [user]);
 
-  async function signupAPI() {
+  async function signupAPI(e) {
+    e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/signup", {
+      const res = await fetch("http://localhost:5555/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-          confirmPass: confirmPass,
+          name,
+          email,
+          password,
+          confirmPassword: confirmPass,
         }),
       });
       const data = await res.json();
       if (!res.ok) {
-        return console.log(data.error);
-      } else navigate("/login");
+        if (data.message) {
+          setSignUpErrs([data.message]);
+          return;
+        }
+
+        if (data.errors) {
+          setSignUpErrs(data.errors.map((e) => e.msg));
+          return;
+        }
+      } else {
+        setSignUpErrs([]);
+        navigate("/login");
+      }
     } catch (error) {
       console.log("something went wrong trying to signup", error.message);
     }
@@ -38,10 +51,12 @@ function Signup() {
 
   return (
     <div className="signup div">
-      <form onSubmi={signupAPI}>
+      {signUpErrs ? signUpErrs.map((err, i) => <div key={i}>{err}</div>) : null}
+      <form onSubmit={signupAPI}>
         <div>
           <label htmlFor="">Name:</label>
           <input
+            name="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -51,6 +66,7 @@ function Signup() {
         <div>
           <label htmlFor="">Email:</label>
           <input
+            name="email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -60,6 +76,7 @@ function Signup() {
         <div>
           <label htmlFor="">Password</label>
           <input
+            name="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -69,11 +86,13 @@ function Signup() {
         <div>
           <label htmlFor="">Confirm Password:</label>
           <input
+            name="confirmPassword"
             type="password"
             value={confirmPass}
             onChange={(e) => setConfirmPass(e.target.value)}
           />
         </div>
+        <button>sign up</button>
       </form>
       <div>
         <div>Already have an account?</div>

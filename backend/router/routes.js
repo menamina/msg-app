@@ -46,6 +46,8 @@ router.post("/signout", (req, res, next) => {
 });
 
 router.get("/hub", isAuth, remote.getUserProfile);
+
+router.get("/getMsgs", isAuth, remote.getMsgs);
 // router.post("/sendMsg", isAuth, remote.sendMsg);
 
 module.exports = router;

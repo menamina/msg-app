@@ -15,7 +15,15 @@ const routes = createBrowserRouter([
       { path: "/", element: <Index /> },
       { path: "/login", element: <Login /> },
       { path: "/signup", element: <Signup /> },
-      { path: "/hub", element: <Hub /> },
+      {
+        path: "/hub",
+        element: <Hub />,
+        children: [
+          { path: "new", element: <NewMsg /> },
+          { path: "chat/:id", element: <Chat /> },
+          { path: "profile", element: <Profile /> },
+        ],
+      },
     ],
   },
 ]);

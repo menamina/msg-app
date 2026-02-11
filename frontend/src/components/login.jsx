@@ -9,11 +9,13 @@ function Index() {
   const [passErr, setPassErr] = useState("");
   const navigate = useNavigate();
 
-  async function login() {
+  async function login(e) {
+    e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("http://localhost:5555/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           email: email,
           password: password,
