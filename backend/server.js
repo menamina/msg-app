@@ -25,6 +25,7 @@ server.use(
   session({
     store: new pgSession({
       pool: pool,
+      createTableIfMissing: true,
     }),
     secret: process.env.COOKIE_SECRET,
     resave: false,
