@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -14,7 +14,7 @@ function App() {
       const data = await res.json();
       if (!res.ok) {
         setUser(null);
-        return navigate("/");
+        return;
       }
       setUser(data.user);
       navigate("/hub");
