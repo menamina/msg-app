@@ -44,9 +44,7 @@ model Friends {
 
 model Profile {
   user Int @unique
-  name String
-  email String @unique
-  updatedPassword String 
+  pfp String
 
   prof User @relation(fields: [user], references:[id])
 }

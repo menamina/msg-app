@@ -121,10 +121,12 @@ async function sendMsg(req, res) {
       return res.status(401).json({ message: "no user" });
     } else {
       const { sendTo, message } = req.body;
+      const id = req.user.id,
+      const idNum = Number(id)
       const sendToNum = Number(sendTo);
       const msgSent = await prisma.message.create({
         data: {
-          from: req.user.id,
+          from: idNum,
           to: sendToNum,
           message: message,
         },
@@ -249,7 +251,33 @@ async function deleteFriend(req, res) {
 
 async function updateProfile(req, res) {
   try {
+    const id = req.user.id;
+    const idNum = Number(id);
     const { pfp, name, email, password } = req.body;
+    const changePFP = await prisma.profile.update({
+      where: {
+        user: idNum,
+      },
+      data: {
+        pfp: pfp,
+      },
+    });
+    const hashedPass = createPassword.createPassword(password)
+    const updateUser = await prisma.user.update({
+      where: {
+        id: idNum
+      },
+      data: {
+      name: name,
+      email: email,
+      saltedHash: hashedPass
+      }
+    })
+    if (changePFP && updateUser){
+      return res.status(200).json({message: true})
+    } else {
+      return res.status(401).json({message: 'couldnt update user'})
+    }
   } catch (error) {
     something;
   }
