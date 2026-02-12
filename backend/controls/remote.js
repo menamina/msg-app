@@ -55,8 +55,16 @@ async function getUserProfile(req, res) {
       },
       include: {
         profile: true,
-        sent: true,
-        received: true,
+        sent: {
+          where: {
+            dltdBySender: false,
+          },
+        },
+        received: {
+          where: {
+            dltdByReceiver: false,
+          },
+        },
         friends: true,
       },
     });
@@ -78,14 +86,23 @@ async function getMsgs(req, res) {
         email: req.user.email,
       },
       include: {
-        received: true,
+        received: {
+          where: {
+            dltdByReceiver: false,
+          },
+        },
+        sent: {
+          where: {
+            dltdBySender: false,
+          },
+        },
       },
     });
 
     if (!user) {
       return res.status(401).json({ message: "no user" });
     } else {
-      res.json({ receivedMsgs: user.received });
+      res.json({ msgsSent: user.sent, msgs: user.received });
     }
   } catch (error) {
     something;
@@ -133,6 +150,36 @@ async function deleteMsg(req, res) {
 
     if (!user) {
       return res.status(401).json({ message: "no user" });
+    } else {
+      const { msgToDelete } = req.body;
+      const msgToDeleteNum = Number(msgToDelete);
+      const reqIDNum = Number(req.user.id);
+      const msg = await prisma.message.findUnique({
+        where: {
+          id: msgToDeleteNum,
+        },
+      });
+      if (msg) {
+        msg.from === reqIDNum
+          ? await prisma.message.update({
+              where: {
+                id: msgToDelete,
+              },
+              data: {
+                dltdByReceiver: true,
+              },
+            })
+          : await prisma.message.update({
+              where: {
+                id: msgToDelete,
+              },
+              data: {
+                dltdBySender: true,
+              },
+            });
+      } else {
+        return res.status(401).json({ message: "cannot find msg to delete" });
+      }
     }
   } catch (error) {
     something;
@@ -149,6 +196,26 @@ async function addFriend(req, res) {
 
     if (!user) {
       return res.status(401).json({ message: "no user" });
+    } else {
+      const { friendToAdd } = req.body;
+      const foundUserWEmail = await prisma.user.findUnique({
+        where: {
+          email: friendToAdd,
+        },
+      });
+      if (!foundUserWEmail) {
+        return res
+          .status(401)
+          .json({ message: "No one was found with that email :(" });
+      } else {
+        await prisma.friends.create({
+          data: {
+            contactID: foundUserWEmail.id,
+            email: friendToAdd,
+          },
+        });
+        return res.status(200).json({ message: true });
+      }
     }
   } catch (error) {
     something;
@@ -157,15 +224,10 @@ async function addFriend(req, res) {
 
 async function deleteFriend(req, res) {
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: req.user.email,
-      },
+    const { friendToDelete } = req.body;
+    const foundUserWEmail = await prisma.user.findUnique({
+      where: {},
     });
-
-    if (!user) {
-      return res.status(401).json({ message: "no user" });
-    }
   } catch (error) {
     something;
   }
@@ -173,15 +235,6 @@ async function deleteFriend(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: req.user.email,
-      },
-    });
-
-    if (!user) {
-      return res.status(401).json({ message: "no user" });
-    }
   } catch (error) {
     something;
   }

@@ -25,6 +25,8 @@ model Message {
   to Int
   message String
   date DateTime @default(now())
+  dltdBySender Boolean @default(false)
+  dltdByReciever Boolean @default(false)
 
 
   fromUser User @relation("From", fields: [from], references: [id])
@@ -34,7 +36,6 @@ model Message {
 model Friends {
   id Int @id @default(autoincrement())
   contactID Int
-  name String
   email String
 
   friendID User @relation(fields: [contactID], references: [id])
