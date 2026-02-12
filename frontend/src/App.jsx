@@ -45,6 +45,10 @@ function App() {
     getMsgs();
   }, [user]);
 
+  useEffect(() => {
+    // this is where i will loop on an interval to get msgs
+  }, []);
+
   return (
     <div className="godDiv">
       <Outlet
