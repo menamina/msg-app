@@ -49,26 +49,22 @@ async function findByEmail(req, res) {
 
 async function getUserProfile(req, res) {
   try {
-    if (req.user) {
-      return res.status(401).json({ message: "no user" });
-    } else {
-      const userProfSettings = await prisma.user.findUnique({
-        where: {
-          email: req.user.email,
-        },
-        include: {
-          profile: true,
-          sent: true,
-          received: true,
-          friends: true,
-        },
-      });
+    const userProfSettings = await prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+      include: {
+        profile: true,
+        sent: true,
+        received: true,
+        friends: true,
+      },
+    });
 
-      if (!userProfSettings) {
-        return res.send(401).status({ message: "no user found" });
-      } else {
-        res.json({ userInfo: userProfSettings });
-      }
+    if (!userProfSettings) {
+      return res.send(401).status({ message: "no user found" });
+    } else {
+      res.json({ userInfo: userProfSettings });
     }
   } catch (error) {
     console.log("error");
@@ -77,23 +73,19 @@ async function getUserProfile(req, res) {
 
 async function getMsgs(req, res) {
   try {
-    if (!req.user) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+      include: {
+        received: true,
+      },
+    });
+
+    if (!user) {
       return res.status(401).json({ message: "no user" });
     } else {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: req.user.email,
-        },
-        include: {
-          received: true,
-        },
-      });
-
-      if (!user) {
-        return res.status(401).json({ message: "no user" });
-      } else {
-        res.json({ receivedMsgs: user.received });
-      }
+      res.json({ receivedMsgs: user.received });
     }
   } catch (error) {
     something;
@@ -102,32 +94,28 @@ async function getMsgs(req, res) {
 
 async function sendMsg(req, res) {
   try {
-    if (!req.user) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+    });
+
+    if (!user) {
       return res.status(401).json({ message: "no user" });
     } else {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: req.user.email,
+      const { sendTo, message } = req.body;
+      const sendToNum = Number(sendTo);
+      const msgSent = await prisma.message.create({
+        data: {
+          from: req.user.id,
+          to: sendToNum,
+          message: message,
         },
       });
-
-      if (!user) {
-        return res.status(401).json({ message: "no user" });
+      if (!msgSent) {
+        return res.status(401).json({ message: "message cannot be sent" });
       } else {
-        const { sendTo, message } = req.body;
-        const sendToNum = Number(sendTo);
-        const msgSent = await prisma.message.create({
-          data: {
-            from: req.user.id,
-            to: sendToNum,
-            message: message,
-          },
-        });
-        if (!msgSent) {
-          return res.status(401).json({ message: "message cannot be sent" });
-        } else {
-          res.status(200).json({ msg: true });
-        }
+        res.status(200).json({ msg: true });
       }
     }
   } catch (error) {
@@ -137,18 +125,14 @@ async function sendMsg(req, res) {
 
 async function deleteMsg(req, res) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: "no user" });
-    } else {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: req.user.email,
-        },
-      });
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+    });
 
-      if (!user) {
-        return res.status(401).json({ message: "no user" });
-      }
+    if (!user) {
+      return res.status(401).json({ message: "no user" });
     }
   } catch (error) {
     something;
@@ -157,18 +141,14 @@ async function deleteMsg(req, res) {
 
 async function addFriend(req, res) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: "no user" });
-    } else {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: req.user.email,
-        },
-      });
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+    });
 
-      if (!user) {
-        return res.status(401).json({ message: "no user" });
-      }
+    if (!user) {
+      return res.status(401).json({ message: "no user" });
     }
   } catch (error) {
     something;
@@ -177,18 +157,14 @@ async function addFriend(req, res) {
 
 async function deleteFriend(req, res) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: "no user" });
-    } else {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: req.user.email,
-        },
-      });
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+    });
 
-      if (!user) {
-        return res.status(401).json({ message: "no user" });
-      }
+    if (!user) {
+      return res.status(401).json({ message: "no user" });
     }
   } catch (error) {
     something;
@@ -197,18 +173,14 @@ async function deleteFriend(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: "no user" });
-    } else {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: req.user.email,
-        },
-      });
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+    });
 
-      if (!user) {
-        return res.status(401).json({ message: "no user" });
-      }
+    if (!user) {
+      return res.status(401).json({ message: "no user" });
     }
   } catch (error) {
     something;
