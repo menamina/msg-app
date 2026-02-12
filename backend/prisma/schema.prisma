@@ -13,24 +13,24 @@ model User {
   saltedHash String
   profile Profile?
 
-  sent Message [] @relation("From")
-  received Message [] @relation("To")
+  sent Message []
+  received Message []
   friends Friends []
 
 }
 
 model Message {
   id Int @id @default(autoincrement())
-  from Int 
-  to Int
+  from Int @unique
+  to Int @unique
   message String
   date DateTime @default(now())
   dltdBySender Boolean @default(false)
   dltdByReciever Boolean @default(false)
 
 
-  fromUser User @relation("From", fields: [from], references: [id])
-  toUser User @relation("To", fields: [to], references: [id])
+  fromUser User @relation(fields: [from], references: [id])
+  toUser User @relation(fields: [to], references: [id])
 }
 
 model Friends {
@@ -43,8 +43,8 @@ model Friends {
 }
 
 model Profile {
-  id Int @id @default(autoincrement())
   user Int @unique
+  name String
   email String @unique
   updatedPassword String 
 

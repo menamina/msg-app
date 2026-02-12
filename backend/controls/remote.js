@@ -226,8 +226,22 @@ async function deleteFriend(req, res) {
   try {
     const { friendToDelete } = req.body;
     const foundUserWEmail = await prisma.user.findUnique({
-      where: {},
+      where: {
+        email: friendToDelete,
+      },
     });
+
+    if (!foundUserWEmail) {
+      return res.status(401).json({ message: "Sorry no friend to delete" });
+    } else {
+      await prisma.friends.delete({
+        where: {
+          contactID: foundUserWEmail.id,
+          email: friendToDelete,
+        },
+      });
+      res.status(200).json({ message: true });
+    }
   } catch (error) {
     something;
   }
@@ -235,6 +249,7 @@ async function deleteFriend(req, res) {
 
 async function updateProfile(req, res) {
   try {
+    const { pfp, name, email, password } = req.body;
   } catch (error) {
     something;
   }
