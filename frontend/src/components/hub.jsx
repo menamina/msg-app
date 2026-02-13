@@ -28,10 +28,14 @@ function Hub() {
               <div>
                 <div>{user.name}</div>
                 <div>{user.email}</div>
-                <div>settings</div>
+                <div>
+                  <Link to="/settings">settings</Link>
+                </div>
               </div>
             </div>
-            <div>contacts</div>
+            <div>
+              <Link to="/contacts">contacts</Link>
+            </div>
             <div>logout</div>
           </div>
         ) : null}

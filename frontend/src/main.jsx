@@ -22,6 +22,7 @@ const routes = createBrowserRouter([
           { path: "/new", element: <NewMsg /> },
           { path: "/chat/:id", element: <Chat /> },
           { path: "/profile", element: <Profile /> },
+          { path: "/settings", element: <Settings />>}
         ],
       },
     ],

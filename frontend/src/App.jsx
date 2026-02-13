@@ -24,6 +24,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (!user) return;
     async function getMsgs() {
       try {
         const res = await fetch("http://localhost:5555/getUserProfile", {
@@ -46,8 +47,27 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    // this is where i will loop on an interval to get msgs
-  }, []);
+    if (!user) return;
+    const interval = setInterval(async function timer() {
+      try {
+        const res = await fetch("http://localhost:5555/getMsgs", {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          console.log;
+          return;
+        } else {
+          setMsgSent(data.msgsSent);
+          setMsgs(data.msgs);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   return (
     <div className="godDiv">
