@@ -4,8 +4,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 function App() {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
-  const [msgs, setMsgs] = useState([]);
-  const [msgsSent, setMsgSent] = useState([]);
+  let received;
+  let sent;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function App() {
     if (!user) return;
     async function getMsgs() {
       try {
-        const res = await fetch("http://localhost:5555/getUserProfile", {
+        const res = await fetch("http://localhost:5555/hub", {
           method: "GET",
           credentials: "include",
         });
@@ -35,11 +35,7 @@ function App() {
         if (!res.ok) {
           return console.log("something");
         }
-
-        setUserProfile(data.userInfo);
-        setMsgs(data.userInfo.received);
-        setMsgSent(data.userInfo.sent);
-
+        setUserProfile(data.userInfo.profile);
         navigate("/hub");
       } catch (err) {
         console.log(err);
@@ -61,8 +57,6 @@ function App() {
           console.log;
           return;
         } else {
-          setMsgSent(data.msgsSent);
-          setMsgs(data.msgs);
         }
       } catch (error) {
         console.log(error);

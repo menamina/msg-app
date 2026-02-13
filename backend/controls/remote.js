@@ -55,16 +55,6 @@ async function getUserProfile(req, res) {
       },
       include: {
         profile: true,
-        sent: {
-          where: {
-            dltdBySender: false,
-          },
-        },
-        received: {
-          where: {
-            dltdByReceiver: false,
-          },
-        },
         friends: true,
       },
     });
@@ -80,26 +70,72 @@ async function getUserProfile(req, res) {
   }
 }
 
-async function getMsgs(req, res) {
-  try {
-    const user = await prisma.user.findUnique({
+async function getSideBar(req, res){
+   try {
+    const userId = Number(req.user.id);
+
+    const messages = await prisma.message.findMany({
       where: {
-        email: req.user.email,
+        OR: [
+          { from: userId },
+          { to: userId }
+        ],
+      },
+      orderBy: {
+        date: "desc"
       },
       include: {
-        received: {
-          where: {
-            dltdByReceiver: false,
-          },
-        },
-        sent: {
-          where: {
-            dltdBySender: false,
-          },
-        },
+        dltdByReceiver: false,
+        dltdBySender: false
       },
     });
 
+    const conversations = [];
+
+    messages.forEach((msg) => {
+      const otherUser =
+        msg.from === userId ? msg.to : msg.from;
+
+      const exists = conversations.find(
+        (other) => other.id === otherUser.id
+      );
+
+      if (!exists) {
+        conversations.push({
+          id: msg.id,
+          name: msg.name,
+          email: msg.email,
+          lastMessage: msg.message,
+          lastDate: msg.date,
+        });
+      }
+    });
+
+    return res.json({ conversations });
+  } catch (error) {
+    console.log("Error in getConversations:", error.message);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
+async function getMsgs(req, res) {
+  try {
+    const userID = Number(req.user.id)
+    const { friendID } = req.body;
+    const friendIDNum = Number(req.friendID)
+    const msgs = await prisma.message.findMany({
+      where: {
+        OR: [
+          { from: friendIDNum, to: userID },
+          { from: userID, to: friendIDNum }
+        ]
+      },
+      include: {
+        dltdByReceiver: false
+      }
+    })
+
+ 
     if (!user) {
       return res.status(401).json({ message: "no user" });
     } else {

@@ -9,25 +9,23 @@ function Hub() {
   // restore deleted msgs
   const { user, msgs, msgsSent, userProfile } = useOutletContext();
   const { showOpts, setShowOpts } = useState(false);
-  const { textedId, setTextedId } = useState([]);
+  const sideBarUsers = [];
   function profileOpts() {}
 
   function checkSentReceived() {
     const allMsgs = [...msgs, ...msgsSent];
-    if (allMsgs.length === 0) {
-      setTextedId([]);
-      return;
-    } else {
-      allMsgs.forEach((msg) => {
-        const foundMsger = textedId.find((obj) => obj.id === msg.id);
-        if (!foundMsger) {
-          setTextedId((prev) => [
-            ...prev,
-            { id: msg.id, name: msg.name, email: msg.email },
-          ]);
-        }
-      });
-    }
+    const sorted = allMsgs.sort((a, b) => b.date - a.date);
+    sorted.forEach((msg) => {
+      const notMe = msg.from !== user.id ? msg.from : msg.to;
+      const exists = sideBarUsers.find((user) => user.id === notMe);
+      if (!exists) {
+        sideBarUsers.push({
+          id: notMe,
+          name: msg.name,
+          email: msg.email,
+        });
+      }
+    });
   }
 
   return (
@@ -61,7 +59,15 @@ function Hub() {
       </div>
       <div cclassName="sidebar+Msgs">
         <div className="sideBar">
-          <div></div>
+          <div>
+            {textingUsr.length === 0
+              ? null
+              : textingUsr.map((user) => {
+                  <div key={user.id}>
+                    <div>{user.name}</div>
+                  </div>;
+                })}
+          </div>
         </div>
         <div className="msgs"></div>
       </div>
