@@ -4,6 +4,7 @@ const remote = require("../controls/remote");
 const validators = require("../middleware/validators");
 const passport = require("../passport/passport");
 const isAuth = require("../middleware/isAuth");
+const multer = require("../multer/multer");
 
 router.post("/signup", validators, remote.signUp);
 
@@ -52,6 +53,6 @@ router.post("/sendMsg", isAuth, remote.sendMsg);
 router.patch("/dltMsg", isAuth, remote.deleteMsg);
 router.post("/addFriend", isAuth, remote.addFriend);
 router.post("/dltFriend", isAuth, remote.deleteFriend);
-router.patch("/updateProfile", isAuth, remote.updateProfile);
+router.patch("/updateProfile", isAuth, multer, remote.updateProfile);
 
 module.exports = router;

@@ -4,8 +4,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 function App() {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
-  let received;
-  let sent;
+  const [sideBar, setSideBar] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +26,7 @@ function App() {
     if (!user) return;
     async function getMsgs() {
       try {
-        const res = await fetch("http://localhost:5555/hub", {
+        const res = await fetch("http://localhost:5555/getUserProfile", {
           method: "GET",
           credentials: "include",
         });
@@ -48,7 +47,7 @@ function App() {
     if (!user) return;
     const interval = setInterval(async function timer() {
       try {
-        const res = await fetch("http://localhost:5555/getMsgs", {
+        const res = await fetch("http://localhost:5555/getSideBar", {
           method: "GET",
           credentials: "include",
         });
@@ -57,6 +56,7 @@ function App() {
           console.log;
           return;
         } else {
+          setSideBar(data.conversations);
         }
       } catch (error) {
         console.log(error);
@@ -71,12 +71,9 @@ function App() {
         context={{
           user,
           setUser,
-          msgsSent,
-          setMsgSent,
-          msgs,
-          setMsgs,
           userProfile,
           setUserProfile,
+          sideBar,
         }}
       ></Outlet>
     </div>

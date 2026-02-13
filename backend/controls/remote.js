@@ -59,7 +59,6 @@ async function getUserProfile(req, res) {
       },
     });
 
-
     if (!userProfSettings) {
       return res.send(401).status({ message: "no user found" });
     } else {
@@ -70,43 +69,36 @@ async function getUserProfile(req, res) {
   }
 }
 
-async function getSideBar(req, res){
-   try {
+async function getSideBar(req, res) {
+  try {
     const userId = Number(req.user.id);
 
     const messages = await prisma.message.findMany({
       where: {
-        OR: [
-          { from: userId },
-          { to: userId }
-        ],
+        OR: [{ from: userId }, { to: userId }],
+        dltdBySender: false,
+        dltdByReceiver: false,
       },
       orderBy: {
-        date: "desc"
+        date: "desc",
       },
       include: {
-        dltdByReceiver: false,
-        dltdBySender: false
+        fromUser: true,
+        toUser: true,
       },
     });
 
     const conversations = [];
 
     messages.forEach((msg) => {
-      const otherUser =
-        msg.from === userId ? msg.to : msg.from;
+      const otherUser = msg.from === userId ? msg.to : msg.from;
 
-      const exists = conversations.find(
-        (other) => other.id === otherUser.id
-      );
+      const exists = conversations.find((other) => other.id === otherUser.id);
 
       if (!exists) {
         conversations.push({
-          id: msg.id,
-          name: msg.name,
-          email: msg.email,
-          lastMessage: msg.message,
-          lastDate: msg.date,
+          id: otherUser.id,
+          name: otherUser.name,
         });
       }
     });
@@ -120,27 +112,24 @@ async function getSideBar(req, res){
 
 async function getMsgs(req, res) {
   try {
-    const userID = Number(req.user.id)
+    const userID = Number(req.user.id);
     const { friendID } = req.body;
-    const friendIDNum = Number(req.friendID)
+    const friendIDNum = Number(friendID);
     const msgs = await prisma.message.findMany({
       where: {
         OR: [
           { from: friendIDNum, to: userID },
-          { from: userID, to: friendIDNum }
-        ]
+          { from: userID, to: friendIDNum },
+        ],
       },
       include: {
-        dltdByReceiver: false
-      }
-    })
-
- 
-    if (!user) {
-      return res.status(401).json({ message: "no user" });
-    } else {
-      res.json({ msgsSent: user.sent, msgs: user.received });
-    }
+        dltdByReceiver: false,
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
+    res.json({ one2one: msgs });
   } catch (error) {
     something;
   }
@@ -148,32 +137,18 @@ async function getMsgs(req, res) {
 
 async function sendMsg(req, res) {
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: req.user.email,
+    const { sendTo, message } = req.body;
+    const id = Number(req.user.id);
+    const sendToNum = Number(sendTo);
+    await prisma.message.create({
+      data: {
+        from: id,
+        to: sendToNum,
+        message: message,
       },
     });
 
-    if (!user) {
-      return res.status(401).json({ message: "no user" });
-    } else {
-      const { sendTo, message } = req.body;
-      const id = req.user.id,
-      const idNum = Number(id)
-      const sendToNum = Number(sendTo);
-      const msgSent = await prisma.message.create({
-        data: {
-          from: idNum,
-          to: sendToNum,
-          message: message,
-        },
-      });
-      if (!msgSent) {
-        return res.status(401).json({ message: "message cannot be sent" });
-      } else {
-        res.status(200).json({ msg: true });
-      }
-    }
+    res.status(200).json({ msg: true });
   } catch (error) {
     something;
   }
@@ -181,44 +156,35 @@ async function sendMsg(req, res) {
 
 async function deleteMsg(req, res) {
   try {
-    const user = await prisma.user.findUnique({
+    const { msgToDelete } = req.body;
+    const msgToDeleteNum = Number(msgToDelete);
+    const id = Number(req.user.id);
+    const msg = await prisma.message.findUnique({
       where: {
-        email: req.user.email,
+        from: id,
+        id: msgToDeleteNum,
       },
     });
-
-    if (!user) {
-      return res.status(401).json({ message: "no user" });
+    if (msg) {
+      msg.from !== id
+        ? await prisma.message.update({
+            where: {
+              id: msgToDelete,
+            },
+            data: {
+              dltdByReceiver: true,
+            },
+          })
+        : await prisma.message.update({
+            where: {
+              id: msgToDelete,
+            },
+            data: {
+              dltdBySender: true,
+            },
+          });
     } else {
-      const { msgToDelete } = req.body;
-      const msgToDeleteNum = Number(msgToDelete);
-      const reqIDNum = Number(req.user.id);
-      const msg = await prisma.message.findUnique({
-        where: {
-          id: msgToDeleteNum,
-        },
-      });
-      if (msg) {
-        msg.from === reqIDNum
-          ? await prisma.message.update({
-              where: {
-                id: msgToDelete,
-              },
-              data: {
-                dltdByReceiver: true,
-              },
-            })
-          : await prisma.message.update({
-              where: {
-                id: msgToDelete,
-              },
-              data: {
-                dltdBySender: true,
-              },
-            });
-      } else {
-        return res.status(401).json({ message: "cannot find msg to delete" });
-      }
+      return res.status(401).json({ message: "cannot find msg to delete" });
     }
   } catch (error) {
     something;
@@ -227,34 +193,24 @@ async function deleteMsg(req, res) {
 
 async function addFriend(req, res) {
   try {
-    const user = await prisma.user.findUnique({
+    const { friendToAdd } = req.body;
+    const foundUserWEmail = await prisma.user.findUnique({
       where: {
-        email: req.user.email,
+        email: friendToAdd,
       },
     });
-
-    if (!user) {
-      return res.status(401).json({ message: "no user" });
+    if (!foundUserWEmail) {
+      return res
+        .status(401)
+        .json({ message: "No one was found with that email :(" });
     } else {
-      const { friendToAdd } = req.body;
-      const foundUserWEmail = await prisma.user.findUnique({
-        where: {
+      await prisma.friends.create({
+        data: {
+          contactID: foundUserWEmail.id,
           email: friendToAdd,
         },
       });
-      if (!foundUserWEmail) {
-        return res
-          .status(401)
-          .json({ message: "No one was found with that email :(" });
-      } else {
-        await prisma.friends.create({
-          data: {
-            contactID: foundUserWEmail.id,
-            email: friendToAdd,
-          },
-        });
-        return res.status(200).json({ message: true });
-      }
+      return res.status(200).json({ message: true });
     }
   } catch (error) {
     something;
@@ -299,21 +255,21 @@ async function updateProfile(req, res) {
         pfp: pfp,
       },
     });
-    const hashedPass = createPassword.createPassword(password)
+    const hashedPass = createPassword.createPassword(password);
     const updateUser = await prisma.user.update({
       where: {
-        id: idNum
+        id: idNum,
       },
       data: {
-      name: name,
-      email: email,
-      saltedHash: hashedPass
-      }
-    })
-    if (changePFP && updateUser){
-      return res.status(200).json({message: true})
+        name: name,
+        email: email,
+        saltedHash: hashedPass,
+      },
+    });
+    if (changePFP && updateUser) {
+      return res.status(200).json({ message: true });
     } else {
-      return res.status(401).json({message: 'couldnt update user'})
+      return res.status(401).json({ message: "couldnt update user" });
     }
   } catch (error) {
     something;
@@ -324,6 +280,7 @@ module.exports = {
   signUp,
   findByEmail,
   getUserProfile,
+  getSideBar,
   sendMsg,
   getMsgs,
   deleteMsg,

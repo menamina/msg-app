@@ -37,10 +37,13 @@ model Message {
 
 model Friends {
   id Int @id @default(autoincrement())
-  contactID Int
-  email String
+  ownerID Int 
+  contactID Int 
 
-  friendID User @relation(fields: [contactID], references: [id])
+  owner User @relation("userFriends", fields: [ownerID], references: [id])
+  contact User @relation("FriendContact", fields: [contactID], references: [id])
+
+  @@unique[([ownerID, contactID])]
 
 }
 
