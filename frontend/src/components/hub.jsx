@@ -9,7 +9,26 @@ function Hub() {
   // restore deleted msgs
   const { user, msgs, msgsSent, userProfile } = useOutletContext();
   const { showOpts, setShowOpts } = useState(false);
+  const { textedId, setTextedId } = useState([]);
   function profileOpts() {}
+
+  function checkSentReceived() {
+    const allMsgs = [...msgs, ...msgsSent];
+    if (allMsgs.length === 0) {
+      setTextedId([]);
+      return;
+    } else {
+      allMsgs.forEach((msg) => {
+        const foundMsger = textedId.find((obj) => obj.id === msg.id);
+        if (!foundMsger) {
+          setTextedId((prev) => [
+            ...prev,
+            { id: msg.id, name: msg.name, email: msg.email },
+          ]);
+        }
+      });
+    }
+  }
 
   return (
     <div className="hubDiv">
@@ -41,7 +60,9 @@ function Hub() {
         ) : null}
       </div>
       <div cclassName="sidebar+Msgs">
-        <div className="sideBar"></div>
+        <div className="sideBar">
+          <div></div>
+        </div>
         <div className="msgs"></div>
       </div>
     </div>

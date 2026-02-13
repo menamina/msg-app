@@ -5,7 +5,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [msgs, setMsgs] = useState([]);
-  const [msgsSent, setMsgSent] = useState(null);
+  const [msgsSent, setMsgSent] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,9 +35,11 @@ function App() {
         if (!res.ok) {
           return console.log("something");
         }
-        setUserProfile(data.userInfo.profile);
+
+        setUserProfile(data.userInfo);
         setMsgs(data.userInfo.received);
         setMsgSent(data.userInfo.sent);
+
         navigate("/hub");
       } catch (err) {
         console.log(err);

@@ -69,6 +69,7 @@ async function getUserProfile(req, res) {
       },
     });
 
+
     if (!userProfSettings) {
       return res.send(401).status({ message: "no user found" });
     } else {
