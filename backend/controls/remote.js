@@ -60,7 +60,7 @@ async function getUserProfile(req, res) {
     });
 
     if (!userProfSettings) {
-      return res.send(401).status({ message: "no user found" });
+      return res.status(401).status({ message: "no user found" });
     } else {
       res.json({ userInfo: userProfSettings });
     }
@@ -121,10 +121,10 @@ async function getMsgs(req, res) {
           { from: friendIDNum, to: userID },
           { from: userID, to: friendIDNum },
         ],
-      },
-      include: {
+        dltdBySender: false,
         dltdByReceiver: false,
       },
+
       orderBy: {
         date: "asc",
       },
@@ -161,7 +161,6 @@ async function deleteMsg(req, res) {
     const id = Number(req.user.id);
     const msg = await prisma.message.findUnique({
       where: {
-        from: id,
         id: msgToDeleteNum,
       },
     });
@@ -204,10 +203,11 @@ async function addFriend(req, res) {
         .status(401)
         .json({ message: "No one was found with that email :(" });
     } else {
+      const id = Number(req.user.id);
       await prisma.friends.create({
         data: {
-          contactID: foundUserWEmail.id,
-          email: friendToAdd,
+          ownerId: id,
+          contactId: foundUserWEmail.id,
         },
       });
       return res.status(200).json({ message: true });
@@ -229,10 +229,11 @@ async function deleteFriend(req, res) {
     if (!foundUserWEmail) {
       return res.status(401).json({ message: "Sorry no friend to delete" });
     } else {
+      const id = Number(req.user.id);
       await prisma.friends.delete({
         where: {
-          contactID: foundUserWEmail.id,
-          email: friendToDelete,
+          ownerId: id,
+          contactId: foundUserWEmail.id,
         },
       });
       res.status(200).json({ message: true });
@@ -255,7 +256,7 @@ async function updateProfile(req, res) {
         pfp: pfp,
       },
     });
-    const hashedPass = createPassword.createPassword(password);
+    const hashedPass = await createPassword.createPassword(password);
     const updateUser = await prisma.user.update({
       where: {
         id: idNum,
