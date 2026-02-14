@@ -3,23 +3,33 @@ import { Link, useOutletContext } from "react-router-dom";
 
 function Hub() {
   const { user, sideBar } = useOutletContext();
+
   const [showOpts, setShowOpts] = useState(false);
-  const [convoMsg, setConvoMsg] = useState([]);
+
   const [chatOpen, setChatOpen] = useState(false);
+  const [convoMsg, setConvoMsg] = useState([]);
   const [sendToUser, setSendToUser] = useState(null);
   const [msgToSend, setMsgToSend] = useState("");
+
   const [userSearch, setUserSearch] = useState("");
-  const [contactSearch, setContactSearch] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  const [contactSearch, setContactSearch] = useState("");
+
+  const [userSearchResults, setUserSearchResults] = useState([]);
+  const [contactSearchResults, setContactSearchResults] = useState([]);
 
   function profileOpts() {
     setShowOpts(true);
   }
 
+  function openFriendSearchBar() {
+    const searchDiv = document.querySelector("search");
+    searchDiv.classList.remove("hidden");
+  }
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (userSearch.trim() === "") {
-        setSearchResults([]);
+        userSearchResults([]);
         return;
       }
 
@@ -35,7 +45,7 @@ function Hub() {
 
           const data = await res.json();
 
-          setSearchResults(data.userSearchResults);
+          setUserSearchResults(data.userSearchResults);
         } catch (error) {
           console.log(error);
         }
@@ -44,6 +54,35 @@ function Hub() {
     }, 300);
     return () => clearTimeout(timeout);
   }, [userSearch]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (contactSearch.trim() === "") {
+        setContactSearchResults([]);
+        return;
+      }
+
+      async function fetchResults() {
+        try {
+          const res = await fetch(
+            `http://localhost:55555/search?query=${contactSearch}`,
+            {
+              method: "GET",
+              credentials: "include",
+            },
+          );
+
+          const data = await res.json();
+
+          setContactSearchResults(data.userContactSearchResults);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      fetchResults();
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [contactSearch]);
 
   async function openConvo(keyID) {
     try {
@@ -115,35 +154,6 @@ function Hub() {
       console.log(error);
     }
   }
-
-  function openFriendSearchBar() {
-    const searchDiv = document.querySelector("search");
-    searchDiv.classList.remove("hidden");
-  }
-
-  // async function search4Friend() {
-  //   try {
-  //     const res = await fetch("http://localhost:5555/friendSearch", {
-  //       method: "GET",
-  //       credentials: "include",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         username: userToFind,
-  //       }),
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       return;
-  //     }
-  //     setFriendSearchResult(data.returnedUser);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // SINCE USING USERNAme sEARCH INSTEAD OF EMAIL DYNAMICALLY LOAD
 
   return (
     <div className="hubDiv">
@@ -242,16 +252,40 @@ function Hub() {
       </div>
 
       <div className="search hidden">
-        <form onSubmit={search4Friend}>
+        <div>
           <label>search for a friend by username</label>
           <input
-            value={userToFind}
-            onChange={(e) => setUserToFind(e.target.value)}
+            value={userSearch}
+            onChange={(e) => setUserSearch(e.target.value)}
             placeholder="Search.."
           ></input>
-          <button>cancel</button>
-          <button>search</button>
-        </form>
+          <div>
+            <button>cancel</button>
+            <button>search</button>
+          </div>
+        </div>
+        <div className="searchResults">
+          {userSearchResults ? (
+            <div>
+              {userSearchResults.map((result) => {
+                <div key={result.id} className="userSearchResult">
+                  <div>
+                    <div>
+                      <img src={result.pfpURL}></img>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p>{result.name}</p>
+                    <p>@{result.username}</p>
+                  </div>
+                </div>;
+              })}
+            </div>
+          ) : (
+            <div>No user found</div>
+          )}
+        </div>
       </div>
     </div>
   );
