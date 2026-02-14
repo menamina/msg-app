@@ -147,7 +147,7 @@ async function getMsgs(req, res) {
         },
       },
     });
-    res.json({ one2one: msgs });
+    res.json({ one2one: msgs, friendID: friendID });
   } catch (error) {
     something;
   }

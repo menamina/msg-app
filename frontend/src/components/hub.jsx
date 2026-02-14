@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Hub() {
-  // click add new message click a + to upload a file+ add it to multer w formData
-  // profile upload pictures + change name, change email + change password
-  // add a friend -- delete a friend
-  // delete messages -- in backend save messages as false if deleted
-  // restore deleted msgs
   const { user, sideBar } = useOutletContext();
   const [showOpts, setShowOpts] = useState(false);
   const [convoMsg, setConvoMsg] = useState([]);
   const [chatOpen, setChatOpen] = useState(false);
+  const [sendToUser, setSendToUser] = useState(null);
+  const [msgToSend, setMsgToSend] = useState("");
+
   function profileOpts() {
     setShowOpts(true);
   }
@@ -32,6 +30,7 @@ function Hub() {
         return;
       } else {
         setConvoMsg(data.one2one);
+        setSendToUser(data.friendID);
         setChatOpen(true);
       }
     } catch (error) {
@@ -56,6 +55,32 @@ function Hub() {
       const filterOutDltdMsg = convoMsg.filter((msg) => msg.id !== msgID);
       setConvoMsg([filterOutDltdMsg]);
       return;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function sendMsg() {
+    try {
+      const res = await fetch("http://localhost:5555/sendMsg", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sendTo: sendToUser,
+          message: msgToSend,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return;
+      }
+      setMsgToSend("");
+      setSendToUser(null);
     } catch (error) {
       console.log(error);
     }
@@ -136,6 +161,17 @@ function Hub() {
                   );
                 }
               })}
+              <div>
+                <form onSubmit={sendMsg}>
+                  <input
+                    value={msgToSend}
+                    onChange={(e) => setMsgToSend(e.target.value)}
+                  ></input>
+                  <button>
+                    <img></img>
+                  </button>
+                </form>
+              </div>
             </div>
           ) : null}
         </div>
