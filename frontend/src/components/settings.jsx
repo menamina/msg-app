@@ -31,15 +31,19 @@ function Settings() {
             <div>
               <div>Update passowrd?</div>
             </div>
-            <div>
+            <div classNAame="updatePass hidden">
+              <div>
+                <label htmlFor="">Current Password</label>
+                <input type="text" />
+              </div>
               <div>
                 <label htmlFor="">New Password</label>
                 <input type="text" />
               </div>
-              <div>
-                <label htmlFor=""></label>
-                <input type="text" />
-              </div>
+            </div>
+            <div>
+              <div>cancel</div>
+              <button>save</button>
             </div>
           </form>
         </div>
