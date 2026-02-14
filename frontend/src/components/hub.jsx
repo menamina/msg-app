@@ -9,9 +9,33 @@ function Hub() {
   // restore deleted msgs
   const { user, sideBar, userProfile } = useOutletContext();
   const { showOpts, setShowOpts } = useState(false);
+  const { openChat, setOpenChat } = useState(false);
   function profileOpts() {}
 
-  function openConvo(keyID) {}
+  async function openConvo(keyID) {
+    try {
+      const res = await fetch("http://localhost:5555/getConvo", {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type" : "application/json" },
+        body: JSON.stringify({
+          withUserID: keyID
+        })
+      })
+
+      const data = await res.json()
+
+      if (!res.ok){
+        return
+      } else {
+        setOpenChat(true)
+      }
+
+    } catch(error){
+      console.log(error)
+    }
+
+  }
 
   return (
     <div className="hubDiv">
@@ -49,11 +73,20 @@ function Hub() {
               ? null
               : sideBar.map((convo) => {
                   const keyID = convo.from === user.id ? convo.to : convo.from;
-                  <div key={keyID} onClick={() => openConvo(keyID)}></div>;
+                  <div key={keyID} id={keyID} onClick={() => openConvo(keyID)}>
+                    <div>
+                      <div clasName="insertRanColor"></div>
+                    </div>
+                    <div>{convo.toUser.name}</div>
+                  </div>;
                 })}
           </div>
         </div>
-        <div className="msgs"></div>
+        <div className="msgs">
+          {openChat ?
+          <div></div>
+          }
+        </div>
       </div>
     </div>
   );

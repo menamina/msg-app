@@ -138,11 +138,38 @@ async function getMsgs(req, res) {
       orderBy: {
         date: "asc",
       },
+      include: {
+        fromUser: {
+          select: { id: true, name: true },
+        },
+        toUser: {
+          select: { id: true, name: true },
+        },
+      },
     });
     res.json({ one2one: msgs });
   } catch (error) {
     something;
   }
+}
+
+async function getConvo(req, res) {
+  const { withUserID } = req.body;
+  const authUserID = Number(req.user.id);
+  const otherUserID = withUserID;
+  const msgsWUser = await prisma.message.findMany({
+    where: {
+      OR: [
+        { from: otherUserID, to: authUserID },
+        { from: authUserID, to: otherUserID },
+      ],
+      dltdBySender: false,
+      dltdByReceiver: false,
+    },
+    orderBy: {
+      date: "asc",
+    },
+  });
 }
 
 async function sendMsg(req, res) {
@@ -292,6 +319,7 @@ module.exports = {
   findByEmail,
   getUserProfile,
   getSideBar,
+  getConvo,
   sendMsg,
   getMsgs,
   deleteMsg,
