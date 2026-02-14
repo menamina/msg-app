@@ -53,6 +53,11 @@ router.post("/sendMsg", isAuth, remote.sendMsg);
 router.patch("/dltMsg", isAuth, remote.deleteMsg);
 router.post("/addFriend", isAuth, remote.addFriend);
 router.post("/dltFriend", isAuth, remote.deleteFriend);
-router.patch("/updateProfile", isAuth, multer, remote.updateProfile);
+router.patch(
+  "/updateProfile",
+  isAuth,
+  multer.single("file"),
+  remote.updateProfile,
+);
 
 module.exports = router;
