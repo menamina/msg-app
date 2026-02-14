@@ -7,26 +7,11 @@ function Hub() {
   // add a friend -- delete a friend
   // delete messages -- in backend save messages as false if deleted
   // restore deleted msgs
-  const { user, msgs, msgsSent, userProfile } = useOutletContext();
+  const { user, sideBar, userProfile } = useOutletContext();
   const { showOpts, setShowOpts } = useState(false);
-  const sideBarUsers = [];
   function profileOpts() {}
 
-  function checkSentReceived() {
-    const allMsgs = [...msgs, ...msgsSent];
-    const sorted = allMsgs.sort((a, b) => b.date - a.date);
-    sorted.forEach((msg) => {
-      const notMe = msg.from !== user.id ? msg.from : msg.to;
-      const exists = sideBarUsers.find((user) => user.id === notMe);
-      if (!exists) {
-        sideBarUsers.push({
-          id: notMe,
-          name: msg.name,
-          email: msg.email,
-        });
-      }
-    });
-  }
+  function openConvo(keyID) {}
 
   return (
     <div className="hubDiv">
@@ -60,12 +45,11 @@ function Hub() {
       <div cclassName="sidebar+Msgs">
         <div className="sideBar">
           <div>
-            {textingUsr.length === 0
+            {sideBar.length === 0
               ? null
-              : textingUsr.map((user) => {
-                  <div key={user.id}>
-                    <div>{user.name}</div>
-                  </div>;
+              : sideBar.map((convo) => {
+                  const keyID = convo.from === user.id ? convo.to : convo.from;
+                  <div key={keyID} onClick={() => openConvo(keyID)}></div>;
                 })}
           </div>
         </div>

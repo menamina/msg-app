@@ -83,15 +83,25 @@ async function getSideBar(req, res) {
         date: "desc",
       },
       include: {
-        fromUser: true,
-        toUser: true,
+        fromUser: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        toUser: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 
     const conversations = [];
 
     messages.forEach((msg) => {
-      const otherUser = msg.from === userId ? msg.to : msg.from;
+      const otherUser = msg.from === userId ? msg.from : msg.to;
 
       const exists = conversations.find((other) => other.id === otherUser.id);
 
