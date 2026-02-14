@@ -9,6 +9,7 @@ datasource db {
 model User {
   id  Int @id @default(autoincrement())
   name String
+  username String @unique
   email String @unique
   saltedHash String
   profile Profile?
@@ -16,6 +17,7 @@ model User {
   sent Message [] @relation("SentMessages")
   received Message [] @relation("ReceivedMessages")
   friends Friends []
+  friendReq 
 
 }
 
@@ -42,6 +44,10 @@ model Friends {
   contact User @relation("FriendContact", fields: [contactID], references: [id])
 
   @@unique[([ownerID, contactID])]
+
+}
+
+model FriendReq {
 
 }
 

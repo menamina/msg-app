@@ -157,6 +157,20 @@ function Hub() {
 
   async function sendFriendReq(userID) {
     try {
+      const res = await fetch("http://localhost:5555/sendFriendReq", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          requestedFriend: userID,
+        }),
+      });
+
+      const data = res.json();
+
+      if (!res.ok) {
+        console.log(data.errors);
+        return;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -204,6 +218,14 @@ function Hub() {
             <div onClick={openFriendSearchBar}>
               find your friends in cyberspace
             </div>
+          </div>
+          <div>
+            <input
+              name="search chats by user"
+              placeholder="Search"
+              value={contactSearch}
+              onChange={(e) => setContactSearch(e.target.value)}
+            ></input>
           </div>
           <div>
             {sideBar.length === 0
