@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useOutletContext, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useOutletContext } from "react-router-dom";
 
 function Hub() {
   const { user, sideBar } = useOutletContext();
@@ -74,8 +74,6 @@ function Hub() {
         }),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
         return;
       }
@@ -85,6 +83,13 @@ function Hub() {
       console.log(error);
     }
   }
+
+  function openSearchBar() {
+    const searchDiv = document.querySelector("search");
+    searchDiv.classList.remove("hidden");
+  }
+
+  async function search() {}
 
   return (
     <div className="hubDiv">
@@ -117,6 +122,9 @@ function Hub() {
       </div>
       <div cclassName="sidebar+Msgs">
         <div className="sideBar">
+          <div>
+            <div onClick={openSearchBar}>find your friends in cyberspace</div>
+          </div>
           <div>
             {sideBar.length === 0
               ? null
@@ -175,6 +183,14 @@ function Hub() {
             </div>
           ) : null}
         </div>
+      </div>
+
+      <div className="search hidden">
+        <form>
+          <label>search for a friend by email</label>
+          <input></input>
+          <button>cancel</button>
+        </form>
       </div>
     </div>
   );
