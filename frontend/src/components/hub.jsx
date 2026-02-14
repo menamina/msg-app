@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 
 function Hub() {
@@ -9,12 +9,41 @@ function Hub() {
   const [sendToUser, setSendToUser] = useState(null);
   const [msgToSend, setMsgToSend] = useState("");
   const [userSearch, setUserSearch] = useState("");
-  const [contactSearch, setContactSearch] = useState("");
-  const [searchResults, setSearchResults] = useState("");
+  const [contactSearch, setContactSearch] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   function profileOpts() {
     setShowOpts(true);
   }
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (userSearch.trim() === "") {
+        setSearchResults([]);
+        return;
+      }
+
+      async function fetchResults() {
+        try {
+          const res = await fetch(
+            `http://localhost:55555/search?query=${userSearch}`,
+            {
+              method: "GET",
+              credentials: "include",
+            },
+          );
+
+          const data = await res.json();
+
+          setSearchResults(data.userSearchResults);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      fetchResults();
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [userSearch]);
 
   async function openConvo(keyID) {
     try {
