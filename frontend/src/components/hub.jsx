@@ -7,10 +7,10 @@ function Hub() {
   // add a friend -- delete a friend
   // delete messages -- in backend save messages as false if deleted
   // restore deleted msgs
-  const { user, sideBar, userProfile } = useOutletContext();
-  const { showOpts, setShowOpts } = useState(false);
-  const { convoMsg, setConvoMsg } = useState([]);
-  const { chatOpen, setChatOpen } = useState(false);
+  const { user, sideBar } = useOutletContext();
+  const [showOpts, setShowOpts] = useState(false);
+  const [convoMsg, setConvoMsg] = useState([]);
+  const [chatOpen, setChatOpen] = useState(false);
   function profileOpts() {
     setShowOpts(true);
   }
@@ -34,6 +34,28 @@ function Hub() {
         setConvoMsg(data.one2one);
         setChatOpen(true);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function deleteMsg(msgID) {
+    try {
+      const res = await fetch("http://localhost:5555/dltMsg", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          msgToDelete: msgID,
+        }),
+      });
+
+      if (!res.ok) {
+        return;
+      }
+      const filterOutDltdMsg = convoMsg.filter((msg) => msg.id !== msgID);
+      setConvoMsg([filterOutDltdMsg]);
+      return;
     } catch (error) {
       console.log(error);
     }
@@ -84,29 +106,38 @@ function Hub() {
                 })}
           </div>
         </div>
-        <div className="msgs">{chatOpen ? 
-          <div>
-            {convoMsg.map((msg) => {
-              const isSenderTheLoggedInUser = msg.from === user.id ? true : false;
-              if (isSenderTheLoggedInUser){
-                return (
-                  <div className="me">
-                    <div>
-                      <div>{msg.message}</div>
-                      <div>{msg.date}</div>
-                    </div>
-                  </div>
-                ) 
-              } else {
+        <div className="msgs">
+          {chatOpen ? (
+            <div>
+              {convoMsg.map((msg) => {
+                const isSenderTheLoggedInUser =
+                  msg.from === user.id ? true : false;
+                if (isSenderTheLoggedInUser) {
                   return (
-                  <div className="other">
-                      <div>{msg.message}</div>
-                      <div>{msg.date}</div>
-                  </div>
-                )
-            })}
-          </div> : 
-          null}
+                    <div className="me" key={msg.id}>
+                      <div>
+                        <div>
+                          <div>{msg.message}</div>
+                          <div>{msg.date}</div>
+                        </div>
+                        <div onClick={() => deleteMsg(msg.id)}>x</div>
+                      </div>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="other" key={msg.id}>
+                      <div>
+                        <div>{msg.message}</div>
+                        <div>{msg.date}</div>
+                      </div>
+                      <div onClick={deleteMsg}>x</div>
+                    </div>
+                  );
+                }
+              })}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
