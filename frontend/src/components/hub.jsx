@@ -8,7 +8,9 @@ function Hub() {
   const [chatOpen, setChatOpen] = useState(false);
   const [sendToUser, setSendToUser] = useState(null);
   const [msgToSend, setMsgToSend] = useState("");
-  const [userToFind, setUserToFind] = useState("");
+  const [userSearch, setUserSearch] = useState("");
+  const [contactSearch, setContactSearch] = useState("");
+  const [searchResults, setSearchResults] = useState("");
 
   function profileOpts() {
     setShowOpts(true);
@@ -90,27 +92,27 @@ function Hub() {
     searchDiv.classList.remove("hidden");
   }
 
-  async function search4Friend() {
-    try {
-      const res = await fetch("http://localhost:5555/friendSearch", {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: userToFind,
-        }),
-      });
+  // async function search4Friend() {
+  //   try {
+  //     const res = await fetch("http://localhost:5555/friendSearch", {
+  //       method: "GET",
+  //       credentials: "include",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         username: userToFind,
+  //       }),
+  //     });
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (!res.ok) {
-        return;
-      }
-      setFriendSearchResult(data.returnedUser);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     if (!res.ok) {
+  //       return;
+  //     }
+  //     setFriendSearchResult(data.returnedUser);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   // SINCE USING USERNAme sEARCH INSTEAD OF EMAIL DYNAMICALLY LOAD
 
@@ -216,6 +218,7 @@ function Hub() {
           <input
             value={userToFind}
             onChange={(e) => setUserToFind(e.target.value)}
+            placeholder="Search.."
           ></input>
           <button>cancel</button>
           <button>search</button>
