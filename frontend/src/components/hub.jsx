@@ -17,15 +17,6 @@ function Hub() {
   const [userSearchResults, setUserSearchResults] = useState([]);
   const [contactSearchResults, setContactSearchResults] = useState([]);
 
-  function profileOpts() {
-    setShowOpts(true);
-  }
-
-  function openFriendSearchBar() {
-    const searchDiv = document.querySelector("search");
-    searchDiv.classList.remove("hidden");
-  }
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (userSearch.trim() === "") {
@@ -84,6 +75,15 @@ function Hub() {
     return () => clearTimeout(timeout);
   }, [contactSearch]);
 
+  function profileOpts() {
+    setShowOpts(true);
+  }
+
+  function openFriendSearchBar() {
+    const searchDiv = document.querySelector("search");
+    searchDiv.classList.remove("hidden");
+  }
+
   async function openConvo(keyID) {
     try {
       const res = await fetch("http://localhost:5555/getConvo", {
@@ -104,28 +104,6 @@ function Hub() {
         setSendToUser(data.friendID);
         setChatOpen(true);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function deleteMsg(msgID) {
-    try {
-      const res = await fetch("http://localhost:5555/dltMsg", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({
-          msgToDelete: msgID,
-        }),
-      });
-
-      if (!res.ok) {
-        return;
-      }
-      const filterOutDltdMsg = convoMsg.filter((msg) => msg.id !== msgID);
-      setConvoMsg([filterOutDltdMsg]);
-      return;
     } catch (error) {
       console.log(error);
     }
@@ -153,6 +131,42 @@ function Hub() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async function deleteMsg(msgID) {
+    try {
+      const res = await fetch("http://localhost:5555/dltMsg", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          msgToDelete: msgID,
+        }),
+      });
+
+      if (!res.ok) {
+        return;
+      }
+      const filterOutDltdMsg = convoMsg.filter((msg) => msg.id !== msgID);
+      setConvoMsg([filterOutDltdMsg]);
+      return;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function sendFriendReq(userID) {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function clearUserSearch() {
+    const searchDiv = document.querySelector("search");
+    searchDiv.classList.add("hidden");
+    setUserSearch("");
+    setUserSearchResults([]);
   }
 
   return (
@@ -260,8 +274,7 @@ function Hub() {
             placeholder="Search.."
           ></input>
           <div>
-            <button>cancel</button>
-            <button>search</button>
+            <button onClick={clearUserSearch}>cancel</button>
           </div>
         </div>
         <div className="searchResults">
@@ -269,16 +282,22 @@ function Hub() {
             <div>
               {userSearchResults.map((result) => {
                 <div key={result.id} className="userSearchResult">
-                  <div>
+                  <form onSubmit={sendFriendReq(result.id)}>
                     <div>
-                      <img src={result.pfpURL}></img>
+                      <div>
+                        <img src={result.pfpURL}></img>
+                      </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <p>{result.name}</p>
-                    <p>@{result.username}</p>
-                  </div>
+                    <div>
+                      <p>{result.name}</p>
+                      <p>@{result.username}</p>
+                    </div>
+
+                    <div>
+                      <button>add</button>
+                    </div>
+                  </form>
                 </div>;
               })}
             </div>
