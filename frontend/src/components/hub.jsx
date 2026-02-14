@@ -12,10 +12,12 @@ function Hub() {
   const [msgToSend, setMsgToSend] = useState("");
 
   const [userSearch, setUserSearch] = useState("");
-  const [contactSearch, setContactSearch] = useState("");
+  const [msgSearchByContact, setMsgSearchByContact] = useState("");
 
   const [userSearchResults, setUserSearchResults] = useState([]);
-  const [contactSearchResults, setContactSearchResults] = useState([]);
+  const [msgSearchByContactResults, setMsgSearchByContactResults] = useState(
+    [],
+  );
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -48,15 +50,15 @@ function Hub() {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (contactSearch.trim() === "") {
-        setContactSearchResults([]);
+      if (msgSearchByContact.trim() === "") {
+        setMsgSearchByContactResults([]);
         return;
       }
 
       async function fetchResults() {
         try {
           const res = await fetch(
-            `http://localhost:55555/search?query=${contactSearch}`,
+            `http://localhost:55555/search?query=${msgSearchByContact}`,
             {
               method: "GET",
               credentials: "include",
@@ -65,7 +67,7 @@ function Hub() {
 
           const data = await res.json();
 
-          setContactSearchResults(data.userContactSearchResults);
+          setMsgSearchByContactResults(data.usermsgSearchByContactResults);
         } catch (error) {
           console.log(error);
         }
@@ -73,7 +75,7 @@ function Hub() {
       fetchResults();
     }, 300);
     return () => clearTimeout(timeout);
-  }, [contactSearch]);
+  }, [msgSearchByContact]);
 
   function profileOpts() {
     setShowOpts(true);
@@ -223,11 +225,25 @@ function Hub() {
             <input
               name="search chats by user"
               placeholder="Search"
-              value={contactSearch}
-              onChange={(e) => setContactSearch(e.target.value)}
+              value={msgSearchByContact}
+              onChange={(e) => setMsgSearchByContact(e.target.value)}
             ></input>
           </div>
           <div>
+            {msgSearchByContactResults.length === 0 ? null : (
+              <div>
+                {setMsgSearchByContact.map((contact) => {
+                  <div key={contact.id}>
+                    <div>
+                      <div>
+                        <img src={contact.pfpURL}></img>
+                      </div>
+                    </div>
+                    <div>{contact.name}</div>
+                  </div>;
+                })}
+              </div>
+            )}
             {sideBar.length === 0
               ? null
               : sideBar.map((convo) => {
