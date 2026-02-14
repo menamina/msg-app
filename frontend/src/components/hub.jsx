@@ -9,32 +9,34 @@ function Hub() {
   // restore deleted msgs
   const { user, sideBar, userProfile } = useOutletContext();
   const { showOpts, setShowOpts } = useState(false);
-  const { openChat, setOpenChat } = useState(false);
-  function profileOpts() {}
+  const { convoMsg, setConvoMsg } = useState([]);
+  const { chatOpen, setChatOpen } = useState(false);
+  function profileOpts() {
+    setShowOpts(true);
+  }
 
   async function openConvo(keyID) {
     try {
       const res = await fetch("http://localhost:5555/getConvo", {
         method: "GET",
         credentials: "include",
-        headers: { "Content-Type" : "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          withUserID: keyID
-        })
-      })
+          withUserID: keyID,
+        }),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
-      if (!res.ok){
-        return
+      if (!res.ok) {
+        return;
       } else {
-        setOpenChat(true)
+        setConvoMsg(data.one2one);
+        setChatOpen(true);
       }
-
-    } catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
-
   }
 
   return (
@@ -82,10 +84,29 @@ function Hub() {
                 })}
           </div>
         </div>
-        <div className="msgs">
-          {openChat ?
-          <div></div>
-          }
+        <div className="msgs">{chatOpen ? 
+          <div>
+            {convoMsg.map((msg) => {
+              const isSenderTheLoggedInUser = msg.from === user.id ? true : false;
+              if (isSenderTheLoggedInUser){
+                return (
+                  <div className="me">
+                    <div>
+                      <div>{msg.message}</div>
+                      <div>{msg.date}</div>
+                    </div>
+                  </div>
+                ) 
+              } else {
+                  return (
+                  <div className="other">
+                      <div>{msg.message}</div>
+                      <div>{msg.date}</div>
+                  </div>
+                )
+            })}
+          </div> : 
+          null}
         </div>
       </div>
     </div>
