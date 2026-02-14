@@ -8,6 +8,7 @@ function Hub() {
   const [chatOpen, setChatOpen] = useState(false);
   const [sendToUser, setSendToUser] = useState(null);
   const [msgToSend, setMsgToSend] = useState("");
+  const [userToFind, setUserToFind] = useState("");
 
   function profileOpts() {
     setShowOpts(true);
@@ -84,12 +85,34 @@ function Hub() {
     }
   }
 
-  function openSearchBar() {
+  function openFriendSearchBar() {
     const searchDiv = document.querySelector("search");
     searchDiv.classList.remove("hidden");
   }
 
-  async function search() {}
+  async function search4Friend() {
+    try {
+      const res = await fetch("http://localhost:5555/friendSearch", {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: userToFind,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return;
+      }
+      setFriendSearchResult(data.returnedUser);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // SINCE USING USERNAme sEARCH INSTEAD OF EMAIL DYNAMICALLY LOAD
 
   return (
     <div className="hubDiv">
@@ -123,7 +146,9 @@ function Hub() {
       <div cclassName="sidebar+Msgs">
         <div className="sideBar">
           <div>
-            <div onClick={openSearchBar}>find your friends in cyberspace</div>
+            <div onClick={openFriendSearchBar}>
+              find your friends in cyberspace
+            </div>
           </div>
           <div>
             {sideBar.length === 0
@@ -186,10 +211,14 @@ function Hub() {
       </div>
 
       <div className="search hidden">
-        <form>
-          <label>search for a friend by email</label>
-          <input></input>
+        <form onSubmit={search4Friend}>
+          <label>search for a friend by username</label>
+          <input
+            value={userToFind}
+            onChange={(e) => setUserToFind(e.target.value)}
+          ></input>
           <button>cancel</button>
+          <button>search</button>
         </form>
       </div>
     </div>
