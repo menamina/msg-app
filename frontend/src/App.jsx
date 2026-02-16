@@ -61,7 +61,7 @@ function App() {
       } catch (error) {
         console.log(error);
       }
-    }, 5000);
+    }, 3000);
     return () => clearInterval(interval);
   }, [user]);
 

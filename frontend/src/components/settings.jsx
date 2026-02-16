@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Settings() {
-  const { userProfile, setUserProfile } = useOutletContext();
-  const [portrait, setPortrait] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const { user, userProfile, setUserProfile } = useOutletContext();
+  const [portrait, setPortrait] = useState(userProfile.pfp);
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
   const [currentPass, setCurrentPass] = useState("");
   const [newPass, setNewPass] = useState("");
+  const navigate = useNavigate();
 
   async function updateProfile() {
     const form = new FormData();
@@ -21,7 +22,12 @@ function Settings() {
     }
   }
 
-  function cancelUpdate() {}
+  function cancelUpdate() {
+    setPortrait(userProfile.pfp);
+    setName(user.name);
+    setEmail(user.email);
+    navigate("/hub");
+  }
 
   return (
     <div className="profileDiv">
