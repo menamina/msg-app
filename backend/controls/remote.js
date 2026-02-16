@@ -307,49 +307,56 @@ async function updateProfile(req, res) {
       where: {
         id: idNum,
       },
-      include: {
-        profile: true,
-      },
     });
 
-    if (pfp) {
-      const changePFP = await prisma.profile.update({
-        where: {
-          user: idNum,
-        },
+    if (currentPass && newPassword) {
+      const match = createPassword.checkPassword(currentPass, user.saltedHash);
+
+      if (!match) {
+        return res.statu(404).json({
+          error: "The current password you entered is incorrect",
+        });
+      }
+
+      const approvedPass = createPassword.createPassword(newPassword);
+
+      const updateUser = await prisma.user.update({
+        where: { id: idNum },
         data: {
-          pfp: pfp,
+          name: name,
+          email: email,
+          password: approvedPass,
+
+          profile: {
+            update: {
+              pfp: pfp,
+            },
+          },
         },
       });
+
+      return res
+        .status(200)
+        .json({ user: updateUser, profile: updateUser.profile });
     }
 
-    const match = createPassword.checkPassword(currentPass, user.saltedHash);
-
-    if (!match) {
-      return res.statu(404).json({
-        error: "The current password you entered is incorrect",
-      });
-    }
-
-    // check if current pass is accurate if so update hashedpass
-
-    const hashedPass = await createPassword.createPassword(password);
     const updateUser = await prisma.user.update({
-      where: {
-        id: idNum,
-      },
+      where: { id: idNum },
       data: {
         name: name,
         email: email,
-        saltedHash: hashedPass,
+
+        profile: {
+          update: {
+            pfp: pfp,
+          },
+        },
       },
     });
-    if (changePFP && updateUser) {
-      return res.status(200).json({ message: true });
-      // return object so we cn updateUserProfile
-    } else {
-      return res.status(401).json({ message: "couldnt update user" });
-    }
+
+    return res
+      .status(200)
+      .json({ user: updateUser, profile: updateUser.profile });
   } catch (error) {
     something;
   }
