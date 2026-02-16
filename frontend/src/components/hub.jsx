@@ -10,6 +10,7 @@ function Hub() {
   const [convoMsg, setConvoMsg] = useState([]);
   const [sendToUser, setSendToUser] = useState(null);
   const [msgToSend, setMsgToSend] = useState("");
+  const [fileToSend, setFileToSend] = useState("");
 
   const [userSearch, setUserSearch] = useState("");
   const [msgSearchByContact, setMsgSearchByContact] = useState("");
@@ -289,10 +290,24 @@ function Hub() {
               })}
               <div>
                 <form onSubmit={sendMsg}>
-                  <input
-                    value={msgToSend}
-                    onChange={(e) => setMsgToSend(e.target.value)}
-                  ></input>
+                  <div>
+                    {fileToSend ? (
+                      <div>
+                        <img src={fileToSend}></img>
+                      </div>
+                    ) : null}
+                    <div>
+                      <input
+                        value={msgToSend}
+                        onChange={(e) => setMsgToSend(e.target.value)}
+                      ></input>
+                      <input
+                        type="file"
+                        value={fileToSend}
+                        onChange={(e) => setFileToSend(e.target.value)}
+                      ></input>
+                    </div>
+                  </div>
                   <button>
                     <img></img>
                   </button>
