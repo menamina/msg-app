@@ -3,6 +3,19 @@ import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Settings() {
   const { userProfile, setUserProfile } = useOutletContext();
+  const 
+
+  async function updateProfile() {
+    const form = new FormData();
+    try {
+      const res = await fetch("http://localhost:5555/updateProfile", {
+        method: "PATCH",
+        credentials: "incluide",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="profileDiv">
