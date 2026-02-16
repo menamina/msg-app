@@ -3,11 +3,11 @@ import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Settings() {
   const { userProfile, setUserProfile } = useOutletContext();
-  const [portrait, updatePortrait] = useState("");
-  const [name, updateName] = useState("");
-  const [email, updateEmail] = useState("");
-  const [currentPass, updateCurrentPass] = useState("");
-  const [newPass, updateNewPass] = useState("");
+  const [portrait, setPortrait] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [currentPass, setCurrentPass] = useState("");
+  const [newPass, setNewPass] = useState("");
 
   async function updateProfile() {
     const form = new FormData();
@@ -35,15 +35,29 @@ function Settings() {
           <form onSubmit={updateProfile}>
             <div>
               <label htmlFor="">Portrait:</label>
-              <input type="text" />
+              <img>portrait here</img>
+              <input
+                type="file"
+                name="file"
+                value={portrait}
+                onChange={(e) => setPortrait(e.target.value)}
+              />
             </div>
             <div>
               <label htmlFor="">Name:</label>
-              <input type="text" />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
             <div>
               <label htmlFor="">Email</label>
-              <input type="text" />
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div>
               <div>Update passowrd?</div>
@@ -51,11 +65,19 @@ function Settings() {
             <div classNAame="updatePass hidden">
               <div>
                 <label htmlFor="">Current Password</label>
-                <input type="text" />
+                <input
+                  type="text"
+                  value={currentPass}
+                  onChange={(e) => setCurrentPass(e.target.value)}
+                />
               </div>
               <div>
                 <label htmlFor="">New Password</label>
-                <input type="text" />
+                <input
+                  type="text"
+                  value={newPass}
+                  onChange={(e) => setNewPass(e.target.value)}
+                />
               </div>
             </div>
             <div>
