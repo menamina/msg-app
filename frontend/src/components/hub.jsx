@@ -195,18 +195,18 @@ function Hub() {
       <div className="userNav">
         <div>Cyberspace</div>
         <div>
-          <img></img>
+          <img
+            src={`http://localhost:5555/${user.profile.pfp}`}
+            alt="your profile image"
+          ></img>
           <div onClick={profileOpts}>{user ? user.name : null}</div>
         </div>
         {showOpts ? (
           <div className="dropDown hidden">
             <div>
               <div>
-                <img></img>
-              </div>
-              <div>
-                <div>{user.name}</div>
-                <div>{user.email}</div>
+                <div>@{user.name}</div>
+                <div>@{user.email}</div>
                 <div>
                   <Link to="/settings">settings</Link>
                 </div>
@@ -237,11 +237,14 @@ function Hub() {
           <div>
             {msgSearchByContactResults.length === 0 ? null : (
               <div>
-                {setMsgSearchByContact.map((contact) => {
+                {msgSearchByContact.map((contact) => {
                   <div key={contact.id}>
                     <div>
                       <div>
-                        <img src={contact.pfpURL}></img>
+                        <img
+                          src={`http://localhost:5555/${contact.profile.pfp}`}
+                          alt="your profile image"
+                        ></img>
                       </div>
                     </div>
                     <div>{contact.name}</div>
@@ -255,7 +258,12 @@ function Hub() {
                   const keyID = convo.from === user.id ? convo.to : convo.from;
                   <div key={keyID} id={keyID} onClick={() => openConvo(keyID)}>
                     <div>
-                      <div clasName="insertRanColor"></div>
+                      <div>
+                        <img
+                          src={`http://localhost:5555/${convo.profile.pfp}`}
+                          alt="your profile image"
+                        ></img>
+                      </div>
                     </div>
                     <div>{convo.toUser.name}</div>
                   </div>;

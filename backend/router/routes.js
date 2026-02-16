@@ -50,6 +50,8 @@ router.get("/hub", isAuth, remote.getUserProfile);
 router.get("/getMsgs", isAuth, remote.getMsgs);
 router.get("/pfpIMG/:image", isAuth, remote.sendIMGS);
 
+router.get("/search", isAuth, remote.searchControl);
+
 router.post("/sendMsg", isAuth, remote.sendMsg);
 router.patch("/dltMsg", isAuth, remote.deleteMsg);
 router.post("/addFriend", isAuth, remote.addFriend);

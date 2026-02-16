@@ -379,6 +379,7 @@ module.exports = {
   signUp,
   findByEmail,
   getUserProfile,
+  sendIMGS,
   getSideBar,
   getConvo,
   sendMsg,
