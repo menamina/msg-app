@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 
+// WORK ON SEARCH CONTROLLER
+
 function Hub() {
   const { user, sideBar } = useOutletContext();
 
@@ -351,7 +353,10 @@ function Hub() {
                   <form onSubmit={sendFriendReq(result.id)}>
                     <div>
                       <div>
-                        <img src={result.pfpURL}></img>
+                        <img
+                          src={`http://localhost:5555/${result.profile.pfp}`}
+                          alt="your profile image"
+                        ></img>
                       </div>
                     </div>
 
