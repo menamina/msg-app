@@ -54,7 +54,7 @@ model FriendReq {
 model Profile {
   id     Int @id @default(autoincrement())
   user Int @unique
-  pfp String
+  pfp String?
 
   prof User @relation(fields: [user], references:[id])
 }

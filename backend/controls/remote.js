@@ -310,22 +310,25 @@ async function updateProfile(req, res) {
     });
 
     if (currentPass && newPassword) {
-      const match = createPassword.checkPassword(currentPass, user.saltedHash);
+      const match = await createPassword.checkPassword(
+        currentPass,
+        user.saltedHash,
+      );
 
       if (!match) {
-        return res.statu(404).json({
+        return res.status(403).json({
           error: "The current password you entered is incorrect",
         });
       }
 
-      const approvedPass = createPassword.createPassword(newPassword);
+      const approvedPass = await createPassword.createPassword(newPassword);
 
       const updateUser = await prisma.user.update({
         where: { id: idNum },
         data: {
           name: name,
           email: email,
-          password: approvedPass,
+          saltedHash: approvedPass,
 
           profile: {
             update: {
