@@ -41,6 +41,7 @@ server.use(
 
 server.use(passport.initialize());
 server.use(passport.session());
+server.use("/uploads", express.static("uploads"));
 
 server.use("/", routes);
 

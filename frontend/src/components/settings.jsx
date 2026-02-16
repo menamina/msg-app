@@ -14,11 +14,15 @@ function Settings() {
     e.preventDefault();
 
     const form = new FormData();
-    form.append("portrait", portrait);
+    if (portrait) {
+      form.append("portrait", portrait);
+    }
+    if (currentPass && newPass) {
+      form.append("currentPass", currentPass);
+      form.append("newPass", newPass);
+    }
     form.append("name", name);
     form.append("email", email);
-    form.append("currentPass", currentPass);
-    form.append("newPass", newPass);
 
     try {
       const res = await fetch("http://localhost:5555/updateProfile", {
