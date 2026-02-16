@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Settings() {
-  const { user, userProfile, setUserProfile } = useOutletContext();
+  const { user, setUser, userProfile, setUserProfile } = useOutletContext();
   const [portrait, setPortrait] = useState(userProfile.pfp);
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
@@ -33,6 +33,7 @@ function Settings() {
         return;
       }
       setUserProfile(data.profile);
+      setUser(data.user);
     } catch (error) {
       console.log(error);
     }

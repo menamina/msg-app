@@ -12,7 +12,7 @@ model User {
   username String @unique
   email String @unique
   saltedHash String
-  profile Profile?
+  profile Profile
 
   sent Message [] @relation("SentMessages")
   received Message [] @relation("ReceivedMessages")
@@ -28,7 +28,7 @@ model Message {
   message String
   date DateTime @default(now())
   dltdBySender Boolean @default(false)
-  dltdByReciever Boolean @default(false)
+  dltdByReceiver Boolean @default(false)
 
 
   fromUser User @relation("SentMessages", fields: [from], references: [id])
@@ -52,6 +52,7 @@ model FriendReq {
 }
 
 model Profile {
+  id     Int @id @default(autoincrement())
   user Int @unique
   pfp String
 

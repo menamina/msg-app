@@ -302,14 +302,34 @@ async function updateProfile(req, res) {
     const id = req.user.id;
     const idNum = Number(id);
     const { pfp, name, email, currentPass, newPassword } = req.body;
-    const changePFP = await prisma.profile.update({
+
+    const user = await prisma.user.findUnique({
       where: {
-        user: idNum,
+        id: idNum,
       },
-      data: {
-        pfp: pfp,
+      include: {
+        profile: true,
       },
     });
+
+    if (pfp) {
+      const changePFP = await prisma.profile.update({
+        where: {
+          user: idNum,
+        },
+        data: {
+          pfp: pfp,
+        },
+      });
+    }
+
+    const match = createPassword.checkPassword(currentPass, user.saltedHash);
+
+    if (!match) {
+      return res.statu(404).json({
+        error: "The current password you entered is incorrect",
+      });
+    }
 
     // check if current pass is accurate if so update hashedpass
 
@@ -326,6 +346,7 @@ async function updateProfile(req, res) {
     });
     if (changePFP && updateUser) {
       return res.status(200).json({ message: true });
+      // return object so we cn updateUserProfile
     } else {
       return res.status(401).json({ message: "couldnt update user" });
     }
