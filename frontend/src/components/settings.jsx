@@ -50,7 +50,10 @@ function Settings() {
     <div className="profileDiv">
       <div>
         <div>
-          <img src={userProfile.profile.pfp} alt="" />
+          <img
+            src={`http://localhost:5555/${userProfile.profile.pfp}`}
+            alt="your profile image"
+          />
         </div>
         <div>{userProfile.name}</div>
       </div>

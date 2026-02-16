@@ -48,6 +48,7 @@ router.post("/signout", (req, res, next) => {
 
 router.get("/hub", isAuth, remote.getUserProfile);
 router.get("/getMsgs", isAuth, remote.getMsgs);
+router.get("/pfpIMG/:image", isAuth, remote.sendIMGS);
 
 router.post("/sendMsg", isAuth, remote.sendMsg);
 router.patch("/dltMsg", isAuth, remote.deleteMsg);

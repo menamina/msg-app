@@ -64,6 +64,16 @@ async function findByUsername(req, res) {
   }
 }
 
+async function sendIMGS(req, res) {
+  try {
+    const img = req.params.image;
+    const imgPath = path.resolve("uploads", img);
+    return res.sendFile(imgPath);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function getUserProfile(req, res) {
   try {
     const userProfSettings = await prisma.user.findUnique({
