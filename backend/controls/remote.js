@@ -47,6 +47,23 @@ async function findByEmail(req, res) {
   }
 }
 
+async function findByUsername(req, res) {
+  try {
+    const { username } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (user) {
+      return res.json({ user });
+    }
+    return res.status(404).json({ message: "no user found with that email" });
+  } catch (error) {
+    console.log(`error @ findByEmail controller: ${error.message}`);
+    return res.status(500).json({ message: "failed to find user" });
+  }
+}
+
 async function getUserProfile(req, res) {
   try {
     const userProfSettings = await prisma.user.findUnique({
@@ -284,7 +301,7 @@ async function updateProfile(req, res) {
   try {
     const id = req.user.id;
     const idNum = Number(id);
-    const { pfp, name, email, password } = req.body;
+    const { pfp, name, email, currentPass, newPassword } = req.body;
     const changePFP = await prisma.profile.update({
       where: {
         user: idNum,
@@ -293,6 +310,9 @@ async function updateProfile(req, res) {
         pfp: pfp,
       },
     });
+
+    // check if current pass is accurate if so update hashedpass
+
     const hashedPass = await createPassword.createPassword(password);
     const updateUser = await prisma.user.update({
       where: {

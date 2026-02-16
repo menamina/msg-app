@@ -10,13 +10,29 @@ function Settings() {
   const [newPass, setNewPass] = useState("");
   const navigate = useNavigate();
 
-  async function updateProfile() {
+  async function updateProfile(e) {
+    e.preventDefault();
+
     const form = new FormData();
+    form.append("portrait", portrait);
+    form.append("name", name);
+    form.append("email", email);
+    form.append("currentPass", currentPass);
+    form.append("newPass", newPass);
+
     try {
       const res = await fetch("http://localhost:5555/updateProfile", {
         method: "PATCH",
         credentials: "incluide",
+        body: form,
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return;
+      }
+      setUserProfile(data.profile);
     } catch (error) {
       console.log(error);
     }

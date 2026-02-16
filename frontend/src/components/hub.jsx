@@ -87,6 +87,10 @@ function Hub() {
     searchDiv.classList.remove("hidden");
   }
 
+  function removeFile() {
+    setFileToSend("");
+  }
+
   async function openConvo(keyID) {
     try {
       const res = await fetch("http://localhost:5555/getConvo", {
@@ -129,8 +133,8 @@ function Hub() {
       if (!res.ok) {
         return;
       }
+      setFileToSend("");
       setMsgToSend("");
-      setSendToUser(null);
     } catch (error) {
       console.log(error);
     }
@@ -293,6 +297,7 @@ function Hub() {
                   <div>
                     {fileToSend ? (
                       <div>
+                        <div onClick={removeFile}>X</div>
                         <img src={fileToSend}></img>
                       </div>
                     ) : null}
