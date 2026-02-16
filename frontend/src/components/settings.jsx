@@ -21,6 +21,8 @@ function Settings() {
     }
   }
 
+  function cancelUpdate() {}
+
   return (
     <div className="profileDiv">
       <div>
@@ -81,7 +83,7 @@ function Settings() {
               </div>
             </div>
             <div>
-              <div>cancel</div>
+              <div onClick={cancelUpdate}>cancel</div>
               <button>save</button>
             </div>
           </form>
