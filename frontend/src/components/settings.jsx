@@ -3,7 +3,11 @@ import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Settings() {
   const { userProfile, setUserProfile } = useOutletContext();
-  const 
+  const [portrait, updatePortrait] = useState("");
+  const [name, updateName] = useState("");
+  const [email, updateEmail] = useState("");
+  const [currentPass, updateCurrentPass] = useState("");
+  const [newPass, updateNewPass] = useState("");
 
   async function updateProfile() {
     const form = new FormData();
