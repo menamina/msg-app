@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
+// WORK ON ADDING REQ.FILE.PATH TO CONTROLLER
+
 function Settings() {
   const { user, setUser, userProfile, setUserProfile } = useOutletContext();
   const [portrait, setPortrait] = useState(userProfile.pfp);
@@ -14,9 +16,6 @@ function Settings() {
     e.preventDefault();
 
     const form = new FormData();
-    if (portrait) {
-      form.append("portrait", portrait);
-    }
     if (currentPass && newPass) {
       form.append("currentPass", currentPass);
       form.append("newPass", newPass);
