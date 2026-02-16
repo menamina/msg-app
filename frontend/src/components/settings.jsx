@@ -15,7 +15,7 @@ function Settings() {
       <div>
         <div>Settings</div>
         <div>
-          <form>
+          <form onSubmit={updateProfile}>
             <div>
               <label htmlFor="">Portrait:</label>
               <input type="text" />
