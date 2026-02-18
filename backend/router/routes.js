@@ -53,7 +53,7 @@ router.get("/pfpIMG/:image", isAuth, remote.sendIMGS);
 router.get("/sideBarChatSearch/search", isAuth, remote.sideBarChatSearch);
 router.get("/searchByUsername/search", isAuth, remote.friendSearch);
 
-router.post("/sendMsg", isAuth, remote.sendMsg);
+router.post("/sendMsg", multer.single("file"), isAuth, remote.sendMsg);
 router.patch("/dltMsg", isAuth, remote.deleteMsg);
 router.post("/addFriend", isAuth, remote.addFriend);
 router.post("/dltFriend", isAuth, remote.deleteFriend);

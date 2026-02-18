@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 
-// WORK ON ADDING REQ.FILE.PATH TO CONTROLLER
-
 function Settings() {
   const { user, setUser, userProfile, setUserProfile } = useOutletContext();
   const [portrait, setPortrait] = useState(userProfile.pfp);

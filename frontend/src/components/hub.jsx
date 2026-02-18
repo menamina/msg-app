@@ -118,6 +118,8 @@ function Hub() {
     }
   }
 
+  // must update this api to send in a form data so multer can accept
+
   async function sendMsg() {
     try {
       const res = await fetch("http://localhost:5555/sendMsg", {
@@ -129,6 +131,7 @@ function Hub() {
         body: JSON.stringify({
           sendTo: sendToUser,
           message: msgToSend,
+          file: fileToSend,
         }),
       });
 
