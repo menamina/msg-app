@@ -26,6 +26,7 @@ model Message {
   from Int
   to Int
   message String
+  file String?
   date DateTime @default(now())
   dltdBySender Boolean @default(false)
   dltdByReceiver Boolean @default(false)

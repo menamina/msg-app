@@ -202,6 +202,7 @@ async function getConvo(req, res) {
 async function sendMsg(req, res) {
   try {
     const { sendTo, message } = req.body;
+    const { fileOrImg } = req.file;
     const id = Number(req.user.id);
     const sendToNum = Number(sendTo);
     await prisma.message.create({
@@ -209,6 +210,7 @@ async function sendMsg(req, res) {
         from: id,
         to: sendToNum,
         message: message,
+        file: fileOrImg ? fileOrImg.filename : null,
       },
     });
 
@@ -311,7 +313,8 @@ async function updateProfile(req, res) {
   try {
     const id = req.user.id;
     const idNum = Number(id);
-    const { pfp, name, email, currentPass, newPassword } = req.body;
+    const { name, email, currentPass, newPassword } = req.body;
+    const { pfp } = req.file;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -342,7 +345,7 @@ async function updateProfile(req, res) {
 
           profile: {
             update: {
-              pfp: pfp,
+              pfp: pfp.filename,
             },
           },
         },
