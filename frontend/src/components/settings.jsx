@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useOutletContext, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 // WORK ON ADDING REQ.FILE.PATH TO CONTROLLER
 
@@ -22,6 +22,7 @@ function Settings() {
     }
     form.append("name", name);
     form.append("email", email);
+    form.append("portrait", portrait);
 
     try {
       const res = await fetch("http://localhost:5555/updateProfile", {

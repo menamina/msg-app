@@ -32,7 +32,7 @@ function Hub() {
       async function fetchResults() {
         try {
           const res = await fetch(
-            `http://localhost:55555/search?query=${userSearch}`,
+            `http://localhost:55555/userSearch/search?query=${userSearch}`,
             {
               method: "GET",
               credentials: "include",

@@ -375,6 +375,10 @@ async function updateProfile(req, res) {
   }
 }
 
+async function sideBarSearch(req, res) {
+  const { query } = req.query;
+}
+
 module.exports = {
   signUp,
   findByEmail,
