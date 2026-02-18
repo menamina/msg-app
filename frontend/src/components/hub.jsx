@@ -32,7 +32,7 @@ function Hub() {
       async function fetchResults() {
         try {
           const res = await fetch(
-            `http://localhost:55555/userSearch/search?query=${userSearch}`,
+            `http://localhost:55555/searchByEmail/search?query=${userSearch}`,
             {
               method: "GET",
               credentials: "include",
@@ -61,7 +61,7 @@ function Hub() {
       async function fetchResults() {
         try {
           const res = await fetch(
-            `http://localhost:55555/search?query=${msgSearchByContact}`,
+            `http://localhost:55555/sideBarChatSearch/search?query=${msgSearchByContact}`,
             {
               method: "GET",
               credentials: "include",

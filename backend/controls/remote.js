@@ -375,8 +375,51 @@ async function updateProfile(req, res) {
   }
 }
 
-async function sideBarSearch(req, res) {
-  const { query } = req.query;
+async function sideBarChatSearch(req, res) {
+  try {
+    const { query } = req.query;
+    const results = await prisma.user.findMany({
+      where: {
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        profile: {
+          select: { pfp: true },
+        },
+      },
+    });
+    res.json({
+      sideBarChatSearchRes: results,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function friendSearch(req, res){
+  try {
+    const {query} = req.query
+    const results = await prisma.user.findMany({
+      where: {
+        name: {
+          contains: query,
+          mode: "insensitive"
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        profile: {
+          pfp: true
+        }
+      }
+    })
+  }
 }
 
 module.exports = {
@@ -392,4 +435,6 @@ module.exports = {
   addFriend,
   deleteFriend,
   updateProfile,
+  sideBarChatSearch,
+  friendSearch
 };
