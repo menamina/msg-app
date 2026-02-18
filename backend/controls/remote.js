@@ -401,24 +401,29 @@ async function sideBarChatSearch(req, res) {
   }
 }
 
-async function friendSearch(req, res){
+async function friendSearch(req, res) {
   try {
-    const {query} = req.query
+    const { query } = req.query;
     const results = await prisma.user.findMany({
       where: {
         name: {
           contains: query,
-          mode: "insensitive"
-        }
+          mode: "insensitive",
+        },
       },
       select: {
         id: true,
         name: true,
+        username: true,
         profile: {
-          pfp: true
-        }
-      }
-    })
+          pfp: true,
+        },
+      },
+    });
+
+    res.json({ friendSearchRes: results });
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -436,5 +441,5 @@ module.exports = {
   deleteFriend,
   updateProfile,
   sideBarChatSearch,
-  friendSearch
+  friendSearch,
 };
