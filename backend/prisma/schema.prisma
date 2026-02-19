@@ -49,6 +49,12 @@ model Friends {
 }
 
 model FriendReq {
+  id Int @id @default(autoincrement())
+  sentBy Int
+  sentTo Int
+  accepted Boolean @default(false)
+
+  @@unique([sentBy, sentTo])
 
 }
 

@@ -200,29 +200,34 @@ function Hub() {
       <div className="userNav">
         <div>Cyberspace</div>
         <div>
-          <img
-            src={`http://localhost:5555/${user.profile.pfp}`}
-            alt="your profile image"
-          ></img>
-          <div onClick={profileOpts}>{user ? user.name : null}</div>
-        </div>
-        {showOpts ? (
-          <div className="dropDown hidden">
-            <div>
+          <div>
+            <Link to="/friendReq">friend reqs</Link>
+          </div>
+          <div>
+            <img
+              src={`http://localhost:5555/${user.profile.pfp}`}
+              alt="your profile image"
+            ></img>
+            <div onClick={profileOpts}>{user ? user.name : null}</div>
+          </div>
+          {showOpts ? (
+            <div className="dropDown hidden">
               <div>
-                <div>@{user.name}</div>
-                <div>@{user.email}</div>
                 <div>
-                  <Link to="/settings">settings</Link>
+                  <div>@{user.name}</div>
+                  <div>@{user.email}</div>
+                  <div>
+                    <Link to="/settings">settings</Link>
+                  </div>
                 </div>
               </div>
+              <div>
+                <Link to="/contacts">contacts</Link>
+              </div>
+              <div>logout</div>
             </div>
-            <div>
-              <Link to="/contacts">contacts</Link>
-            </div>
-            <div>logout</div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </div>
       <div cclassName="sidebar+Msgs">
         <div className="sideBar">
@@ -369,7 +374,9 @@ function Hub() {
                     </div>
 
                     <div>
-                      <button>add</button>
+                      <button onClick={() => sendFriendReq(result.id)}>
+                        add
+                      </button>
                     </div>
                   </form>
                 </div>;
