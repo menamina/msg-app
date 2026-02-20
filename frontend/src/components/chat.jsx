@@ -4,7 +4,6 @@ import { useOutletContext } from "react-router-dom";
 function Chat({ activeChatUser }) {
   const { user } = useOutletContext();
 
-  const [chatOpen, setChatOpen] = useState(false);
   const [convoMsg, setConvoMsg] = useState([]);
   const [sendToUser, setSendToUser] = useState(null);
   const [msgToSend, setMsgToSend] = useState("");
@@ -12,7 +11,6 @@ function Chat({ activeChatUser }) {
 
   useEffect(() => {
     if (!activeChatUser) {
-      setChatOpen(false);
       setConvoMsg([]);
       setSendToUser(null);
       return;
@@ -36,7 +34,6 @@ function Chat({ activeChatUser }) {
         } else {
           setConvoMsg(data.one2one);
           setSendToUser(data.friendID);
-          setChatOpen(true);
         }
       } catch (error) {
         console.log(error);
@@ -104,7 +101,7 @@ function Chat({ activeChatUser }) {
 
   return (
     <div className="msgs">
-      {chatOpen ? (
+      {activeChatUser ? (
         <div>
           {convoMsg.map((msg) => {
             const isSenderTheLoggedInUser = msg.from === user.id ? true : false;
@@ -163,7 +160,9 @@ function Chat({ activeChatUser }) {
             </form>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
