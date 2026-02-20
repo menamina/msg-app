@@ -235,7 +235,7 @@ function Hub() {
             <div>
               {userSearchResults.map((result) => {
                 <div key={result.id} className="userSearchResult">
-                  <form onSubmit={sendFriendReq(result.id)}>
+                  <form onSubmit={sendFriendReq(result.email)}>
                     <div>
                       <div>
                         <img
@@ -251,9 +251,7 @@ function Hub() {
                     </div>
 
                     <div>
-                      <button onClick={() => sendFriendReq(result.id)}>
-                        add
-                      </button>
+                      <button>add</button>
                     </div>
                   </form>
                 </div>;

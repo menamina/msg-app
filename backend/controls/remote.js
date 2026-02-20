@@ -418,6 +418,7 @@ async function friendSearch(req, res) {
         id: true,
         name: true,
         username: true,
+        email: true,
         profile: {
           pfp: true,
         },
