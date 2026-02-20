@@ -283,9 +283,17 @@ async function requestFriend(req, res) {
   }
 }
 
-async function acceptFriend(req, res) {}
+async function acceptFriend(req, res) {
+  try {
+    const 
+  }
+}
 
-async function denyFriend(req, res) {}
+async function denyFriend(req, res) {
+  try {
+    const
+  }
+}
 
 async function deleteFriend(req, res) {
   try {
