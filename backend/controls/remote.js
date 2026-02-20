@@ -256,6 +256,28 @@ async function deleteMsg(req, res) {
   }
 }
 
+async function getFriendReqs(req, res){
+  try {
+    const returnedReqs = await prisma.user.findMany({
+      where: {
+        id: req.user.id
+      },
+      include: {
+        friendReq: true
+      }
+
+    })
+
+
+      if (returnedReqs.length === 0){
+        return res.status(403).json({message: "You have no friend requests :("})
+      } return res.json({requests: returnedReqs})
+
+  } catch(error){
+    console.log(error)
+  }
+}
+
 async function requestFriend(req, res) {
   try {
     const { friendToAdd } = req.body;
@@ -285,7 +307,11 @@ async function requestFriend(req, res) {
 
 async function acceptFriend(req, res) {
   try {
-    const 
+    const { friendToAccept } = req.body;
+    const acceptFriend = Number(friendToAccept);
+    const acceptedFriend = await prisma.friendreq.findUnique({
+
+    })
   }
 }
 
@@ -453,9 +479,13 @@ module.exports = {
   sendMsg,
   getMsgs,
   deleteMsg,
-  requestFriend,
-  deleteFriend,
   updateProfile,
   sideBarChatSearch,
+  getFriendReqs,
+  requestFriend,
+  acceptFriend,
+  denyFriend,
+  deleteFriend,
+  deleteFriend,
   friendSearch,
 };

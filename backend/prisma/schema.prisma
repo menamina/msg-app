@@ -17,7 +17,7 @@ model User {
   sent Message [] @relation("SentMessages")
   received Message [] @relation("ReceivedMessages")
   friends Friends []
-  friendReq 
+  friendReq FriendReq []
 
 }
 
@@ -53,6 +53,9 @@ model FriendReq {
   sentBy Int
   sentTo Int
   accepted Boolean @default(false)
+
+  whoSent User @relation(fields: [sentBy], references: [id])
+  whoGot User @relation(fields: [sentTo], references: [id])
 
   @@unique([sentBy, sentTo])
 
