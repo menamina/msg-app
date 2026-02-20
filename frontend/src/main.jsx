@@ -6,6 +6,11 @@ import Index from "./components/index";
 import Login from "./components/login";
 import Signup from "./components/signup";
 import Hub from "./components/hub";
+import Contacts from "./components/contacts";
+import FriendReq from "./components/friendReq";
+import NewMsg from "./components/newMsg";
+import Chat from "./components/chat";
+import Settings from "./components/settings";
 
 const routes = createBrowserRouter([
   {
