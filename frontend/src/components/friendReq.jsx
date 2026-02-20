@@ -28,13 +28,32 @@ function FriendReq() {
 
   return (
     <div>
-        { noFriendReqsMsg && <div>{noFriendReqsMsg}</div> }
-        {friendRequests && 
-
-        }
+      {noFriendReqsMsg && <div>{noFriendReqsMsg}</div>}
+      {friendRequests && (
+        <div>
+          {friendRequests.map((request) => {
+            return (
+              <div>
+                <div>
+                  <img>{request.profile.pfp}</img>
+                </div>
+                <div>
+                  <p>{request.name}</p>
+                  <p>@{request.username}</p>
+                </div>
+                <div>
+                  <form onSubmit={handleReqAction}>
+                    <button className="add">add</button>
+                    <button className="deny">deny</button>
+                  </form>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
-  )
-
+  );
 }
 
 export default FriendReq;
