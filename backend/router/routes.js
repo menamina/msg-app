@@ -56,8 +56,10 @@ router.get("/searchByUsername/search", isAuth, remote.friendSearch);
 router.post("/sendMsg", multer.single("file"), isAuth, remote.sendMsg);
 router.patch("/dltMsg", isAuth, remote.deleteMsg);
 
-router.get("/getFriendReqs", isAuth, remote.getFriendReqs);
+router.get("/getFriends", isAuth, remote.getFriends);
+
 router.post("/sendFriendReq", isAuth, remote.requestFriend);
+router.get("/getFriendReqs", isAuth, remote.getFriendReqs);
 router.patch("/acceptFriendReq", isAuth, remote.acceptFriend);
 router.delete("/denyFriendReq", isAuth, remote.denyFriend);
 
