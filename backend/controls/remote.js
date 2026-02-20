@@ -256,7 +256,7 @@ async function deleteMsg(req, res) {
   }
 }
 
-async function addFriend(req, res) {
+async function requestFriend(req, res) {
   try {
     const { friendToAdd } = req.body;
     const foundUserWEmail = await prisma.user.findUnique({
@@ -270,10 +270,10 @@ async function addFriend(req, res) {
         .json({ message: "No one was found with that email :(" });
     } else {
       const id = Number(req.user.id);
-      await prisma.friends.create({
+      await prisma.friendreq.create({
         data: {
-          ownerId: id,
-          contactId: foundUserWEmail.id,
+          sentBy: id,
+          sentTo: foundUserWEmail.id,
         },
       });
       return res.status(200).json({ message: true });
@@ -282,6 +282,10 @@ async function addFriend(req, res) {
     something;
   }
 }
+
+async function acceptFriend(req, res) {}
+
+async function denyFriend(req, res) {}
 
 async function deleteFriend(req, res) {
   try {
@@ -441,7 +445,7 @@ module.exports = {
   sendMsg,
   getMsgs,
   deleteMsg,
-  addFriend,
+  requestFriend,
   deleteFriend,
   updateProfile,
   sideBarChatSearch,

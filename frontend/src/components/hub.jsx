@@ -83,13 +83,13 @@ function Hub() {
     searchDiv.classList.remove("hidden");
   }
 
-  async function sendFriendReq(userID) {
+  async function sendFriendReq(userEmail) {
     try {
       const res = await fetch("http://localhost:5555/sendFriendReq", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
-          requestedFriend: userID,
+          firnedToAdd: userEmail,
         }),
       });
 
