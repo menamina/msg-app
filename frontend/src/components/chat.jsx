@@ -20,7 +20,7 @@ function Chat({ activeChatUser }) {
 
     async function openConvo() {
       try {
-        const res = await fetch("http://localhost:5555/getConvo", {
+        const res = await fetch("http://localhost:5555/getMsgs", {
           method: "GET",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

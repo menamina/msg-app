@@ -148,6 +148,11 @@ function Hub() {
       <div cclassName="sidebar+Msgs">
         <div className="sideBar">
           <div>
+            <div>
+              <Link to="/newMsg">new message</Link>
+            </div>
+          </div>
+          <div>
             <div onClick={openFriendSearchBar}>
               find your friends in cyberspace
             </div>
@@ -183,28 +188,31 @@ function Hub() {
                 })}
               </div>
             )}
-            {msgSearchByContact.trim() !== "" ? null : sideBar.length === 0 ? null : (
-              sideBar.map((convo) => {
-                const keyID = convo.from === user.id ? convo.to : convo.from;
-                return (
-                  <div
-                    key={keyID}
-                    id={keyID}
-                    onClick={() => setActiveChatUser(keyID)}
-                  >
-                    <div>
-                      <div>
-                        <img
-                          src={`http://localhost:5555/${convo.profile.pfp}`}
-                          alt="your profile image"
-                        ></img>
+            {msgSearchByContact.trim() !== ""
+              ? null
+              : sideBar.length === 0
+                ? null
+                : sideBar.map((convo) => {
+                    const keyID =
+                      convo.from === user.id ? convo.to : convo.from;
+                    return (
+                      <div
+                        key={keyID}
+                        id={keyID}
+                        onClick={() => setActiveChatUser(keyID)}
+                      >
+                        <div>
+                          <div>
+                            <img
+                              src={`http://localhost:5555/${convo.profile.pfp}`}
+                              alt="your profile image"
+                            ></img>
+                          </div>
+                        </div>
+                        <div>{convo.toUser.name}</div>
                       </div>
-                    </div>
-                    <div>{convo.toUser.name}</div>
-                  </div>
-                );
-              })
-            )}
+                    );
+                  })}
           </div>
         </div>
         <Chat activeChatUser={activeChatUser}></Chat>
