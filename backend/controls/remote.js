@@ -258,17 +258,25 @@ async function deleteMsg(req, res) {
 
 async function getFriendReqs(req, res){
   try {
-    const returnedReqs = await prisma.user.findMany({
+    const returnedReqs = await prisma.friendReq.findMany({
       where: {
-        id: req.user.id
+        sentTo: req.user.id,
+        accepted: false,
       },
       include: {
-        friendReq: true
+        whoSent: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            profile: {
+              pfp: true
+            }
+          }
+        }
       }
 
     })
-
-
       if (returnedReqs.length === 0){
         return res.status(403).json({message: "You have no friend requests :("})
       } return res.json({requests: returnedReqs})

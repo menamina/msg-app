@@ -17,7 +17,8 @@ model User {
   sent Message [] @relation("SentMessages")
   received Message [] @relation("ReceivedMessages")
   friends Friends []
-  friendReq FriendReq []
+  sentRequests     FriendReq[] @relation("whoSent")
+  receivedRequests FriendReq[] @relation("whoGot")
 
 }
 
