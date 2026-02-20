@@ -50,6 +50,11 @@ function Chat({ activeChatUser }) {
     setFileToSend("");
   }
 
+  function showAddFileInput() {
+    const addFile = document.querySelector(".addFile");
+    addFile.className.remove("hidden");
+  }
+
   // must update this api to send in a form data so multer can accept
   async function sendMsg() {
     try {
@@ -62,7 +67,6 @@ function Chat({ activeChatUser }) {
         body: JSON.stringify({
           sendTo: sendToUser,
           message: msgToSend,
-          file: fileToSend,
         }),
       });
 
@@ -142,7 +146,11 @@ function Chat({ activeChatUser }) {
                     value={msgToSend}
                     onChange={(e) => setMsgToSend(e.target.value)}
                   ></input>
+                  <button type="button" onClick={showAddFileInput}>
+                    +
+                  </button>
                   <input
+                    className="addFile hidden"
                     type="file"
                     value={fileToSend}
                     onChange={(e) => setFileToSend(e.target.value)}

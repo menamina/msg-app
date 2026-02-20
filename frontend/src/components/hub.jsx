@@ -163,28 +163,30 @@ function Hub() {
           <div>
             {msgSearchByContactResults.length === 0 ? null : (
               <div>
-                {msgSearchByContact.map((contact) => {
-                  <div
-                    key={contact.id}
-                    onClick={() => setActiveChatUser(contact.id)}
-                  >
-                    <div>
+                {msgSearchByContactResults.map((contact) => {
+                  return (
+                    <div
+                      key={contact.id}
+                      onClick={() => setActiveChatUser(contact.id)}
+                    >
                       <div>
-                        <img
-                          src={`http://localhost:5555/${contact.profile.pfp}`}
-                          alt="your profile image"
-                        ></img>
+                        <div>
+                          <img
+                            src={`http://localhost:5555/${contact.profile.pfp}`}
+                            alt="your profile image"
+                          ></img>
+                        </div>
                       </div>
+                      <div>{contact.name}</div>
                     </div>
-                    <div>{contact.name}</div>
-                  </div>;
+                  );
                 })}
               </div>
             )}
-            {sideBar.length === 0
-              ? null
-              : sideBar.map((convo) => {
-                  const keyID = convo.from === user.id ? convo.to : convo.from;
+            {msgSearchByContact.trim() !== "" ? null : sideBar.length === 0 ? null : (
+              sideBar.map((convo) => {
+                const keyID = convo.from === user.id ? convo.to : convo.from;
+                return (
                   <div
                     key={keyID}
                     id={keyID}
@@ -199,8 +201,10 @@ function Hub() {
                       </div>
                     </div>
                     <div>{convo.toUser.name}</div>
-                  </div>;
-                })}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
         <Chat activeChatUser={activeChatUser}></Chat>
