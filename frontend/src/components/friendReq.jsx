@@ -31,18 +31,24 @@ function FriendReq() {
     e.preventDefault();
 
     const action = e.nativeEvent.submitter;
+    const requestId = e.currentTarget.dataset.id;
 
     if (action === "add") {
       try {
-        const requestId = e.currentTarget.dataset.id;
         const res = await fetch("http://localhost:5555/acceptFriendReq", {
-          method: "POST",
+          method: "PATCH",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: {
             friendToAccept: requestId,
           },
         });
+        if (res.ok) {
+          const filteredReqs = friendRequests.filter(
+            (personWhoWantsToAddME) => personWhoWantsToAddME.id !== requestId,
+          );
+          setFriendRequests(filteredReqs);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -50,6 +56,20 @@ function FriendReq() {
 
     if (action === "deny") {
       try {
+        const res = await fetch("http://localhost:5555/denyFriendReq", {
+          method: "DELETE",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: {
+            friendToDeny: requestId,
+          },
+        });
+        if (res.ok) {
+          const filteredReqs = friendRequests.filter(
+            (personWhoWantsToAddME) => personWhoWantsToAddME.id !== requestId,
+          );
+          setFriendRequests(filteredReqs);
+        }
       } catch (error) {
         console.log(error);
       }
