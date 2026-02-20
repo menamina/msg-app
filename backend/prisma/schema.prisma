@@ -7,19 +7,19 @@ datasource db {
 }
 
 model User {
-  id  Int @id @default(autoincrement())
-  name String
-  username String @unique
-  email String @unique
-  saltedHash String
-  profile Profile
+  id              Int       @id @default(autoincrement())
+  name            String
+  username        String    @unique
+  email           String    @unique
+  saltedHash      String
+  profile         Profile
 
-  sent Message [] @relation("SentMessages")
-  received Message [] @relation("ReceivedMessages")
-  friends Friends []
-  sentRequests     FriendReq[] @relation("whoSent")
+  sent            Message[] @relation("SentMessages")
+  received        Message[] @relation("ReceivedMessages")
+  ownerFriends    Friends[] @relation("OwnerFriends")
+  contactFriends  Friends[] @relation("ContactFriends")
+  sentRequests    FriendReq[] @relation("whoSent")
   receivedRequests FriendReq[] @relation("whoGot")
-
 }
 
 model Message {
@@ -38,15 +38,14 @@ model Message {
 }
 
 model Friends {
-  id Int @id @default(autoincrement())
-  ownerID Int 
-  contactID Int 
+  id        Int @id @default(autoincrement())
+  ownerID   Int
+  contactID Int
 
-  owner User @relation("userFriends", fields: [ownerID], references: [id])
-  contact User @relation("FriendContact", fields: [contactID], references: [id])
+  owner   User @relation("OwnerFriends", fields: [ownerID], references: [id])
+  contact User @relation("ContactFriends", fields: [contactID], references: [id])
 
-  @@unique[([ownerID, contactID])]
-
+  @@unique([ownerID, contactID])
 }
 
 model FriendReq {
@@ -55,8 +54,8 @@ model FriendReq {
   sentTo Int
   accepted Boolean @default(false)
 
-  whoSent User @relation(fields: [sentBy], references: [id])
-  whoGot User @relation(fields: [sentTo], references: [id])
+  whoSent User @relation("whoSent", fields: [sentBy], references: [id])
+  whoGot User @relation("whoGot", fields: [sentTo], references: [id])
 
   @@unique([sentBy, sentTo])
 

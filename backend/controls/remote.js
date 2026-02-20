@@ -256,7 +256,7 @@ async function deleteMsg(req, res) {
   }
 }
 
-async function getFriendReqs(req, res){
+async function getFriendReqs(req, res) {
   try {
     const returnedReqs = await prisma.friendReq.findMany({
       where: {
@@ -270,19 +270,20 @@ async function getFriendReqs(req, res){
             name: true,
             username: true,
             profile: {
-              pfp: true
-            }
-          }
-        }
-      }
-
-    })
-      if (returnedReqs.length === 0){
-        return res.status(403).json({message: "You have no friend requests :("})
-      } return res.json({requests: returnedReqs})
-
-  } catch(error){
-    console.log(error)
+              pfp: true,
+            },
+          },
+        },
+      },
+    });
+    if (returnedReqs.length === 0) {
+      return res
+        .status(403)
+        .json({ message: "You have no friend requests :(" });
+    }
+    return res.json({ requests: returnedReqs });
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -317,15 +318,36 @@ async function acceptFriend(req, res) {
   try {
     const { friendToAccept } = req.body;
     const acceptFriend = Number(friendToAccept);
-    const acceptedFriend = await prisma.friendreq.findUnique({
+    await prisma.friendreq.update({
+      where: {
+        sentBy: acceptFriend,
+        sentTo: req.user.id,
+      },
+      data: {
+        accepted: true,
+      },
+    });
 
-    })
+    return res.json({ success: true });
+  } catch (error) {
+    console.log(error);
   }
 }
 
 async function denyFriend(req, res) {
   try {
-    const
+    const { friendToDeny } = req.body;
+    const denyFriendNum = Number(friendToDeny);
+    await prisma.friendreq.delete({
+      where: {
+        sentBy: denyFriendNum,
+        sentTo: req.user.id,
+      },
+    });
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.log(error);
   }
 }
 

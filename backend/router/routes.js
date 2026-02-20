@@ -58,8 +58,8 @@ router.patch("/dltMsg", isAuth, remote.deleteMsg);
 
 router.get("/getFriendReqs", isAuth, remote.getFriendReqs);
 router.post("/sendFriendReq", isAuth, remote.requestFriend);
-router.post("/acceptFriendReq", isAuth, remote.acceptFriend);
-router.post("/denyFriendReq", isAuth, remote.denyFriend);
+router.patch("/acceptFriendReq", isAuth, remote.acceptFriend);
+router.delete("/denyFriendReq", isAuth, remote.denyFriend);
 
 router.post("/dltFriend", isAuth, remote.deleteFriend);
 
