@@ -256,6 +256,35 @@ async function deleteMsg(req, res) {
   }
 }
 
+async function getFriends(req, res) {
+  try {
+    const friends = await prisma.friends.findMany({
+      where: {
+        ownerID: req.user.id,
+      },
+      include: {
+        contact: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            profile: {
+              pfp: true,
+            },
+          },
+        },
+      },
+    });
+
+    if (friends.length === 0) {
+      return res.status(403).json({ message: "no friends" });
+    }
+    return res.json({ friends: friends });
+  } catch (error) {
+    res.status(500).json({ message: "cannot retrieve friends" });
+  }
+}
+
 async function getFriendReqs(req, res) {
   try {
     const returnedReqs = await prisma.friendReq.findMany({
@@ -325,6 +354,13 @@ async function acceptFriend(req, res) {
       },
       data: {
         accepted: true,
+      },
+    });
+
+    await prisma.friends.create({
+      data: {
+        ownerID: req.user.id,
+        contactID: acceptFriend,
       },
     });
 
@@ -511,6 +547,7 @@ module.exports = {
   deleteMsg,
   updateProfile,
   sideBarChatSearch,
+  getFriends,
   getFriendReqs,
   requestFriend,
   acceptFriend,

@@ -21,7 +21,7 @@ function FriendReq() {
         }
         setFriendRequests(data.requests);
       } catch (error) {
-        console.log(error);
+        setErrors(error);
       }
     }
     getFriendReqs();
@@ -48,9 +48,10 @@ function FriendReq() {
             (personWhoWantsToAddME) => personWhoWantsToAddME.id !== requestId,
           );
           setFriendRequests(filteredReqs);
+          return;
         }
       } catch (error) {
-        console.log(error);
+        setErrors(error);
       }
     }
 
@@ -69,15 +70,17 @@ function FriendReq() {
             (personWhoWantsToAddME) => personWhoWantsToAddME.id !== requestId,
           );
           setFriendRequests(filteredReqs);
+          return;
         }
       } catch (error) {
-        console.log(error);
+        setErrors(error);
       }
     }
   }
 
   return (
     <div>
+      {errors && <div>{errors}</div>}
       {noFriendReqsMsg && <div>{noFriendReqsMsg}</div>}
       {friendRequests && (
         <div>
