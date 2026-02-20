@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import "./css/index.css";
 
 function App() {
   const [user, setUser] = useState(null);
