@@ -8,6 +8,8 @@ import Chat from "./chat";
 function Hub() {
   const { user, sideBar } = useOutletContext();
 
+  const [friendReq, setFriendReq] = useState(false);
+
   const [showOpts, setShowOpts] = useState(false);
   const [activeChatUser, setActiveChatUser] = useState(null);
 
@@ -120,7 +122,15 @@ function Hub() {
         <div>Cyberspace</div>
         <div>
           <div>
-            <Link to="/friendReq">friend reqs</Link>
+            <Link to="/friendReq">
+              {friendReq ? (
+                <div className="symbolIfFriendReq">
+                  <img></img>
+                </div>
+              ) : (
+                <img></img>
+              )}
+            </Link>
           </div>
           <div>
             <img
