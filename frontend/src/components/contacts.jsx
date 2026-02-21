@@ -32,24 +32,26 @@ function Contacts() {
 
   async function deleteFriend(contactID) {
     try {
-      const res = await  fetch("http://localhost:5555/dltFriend", {
-          method: "GET",
-          credentials: "include",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            deleteThisID: contactID
+      const res = await fetch("http://localhost:5555/dltFriend", {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          deleteThisID: contactID,
+        }),
+      });
 
-          })
-        });
-
-        if (!res.ok){
-          return 
-        } 
-        const filtedContacts = contacts.filter((contact) => contact.id !== contactID)
-        setContacts([filtedContacts])
-        return
+      if (!res.ok) {
+        return;
+      }
+      const filteredContacts = contacts.filter(
+        (contact) => contact.id !== contactID,
+      );
+      setContacts([filteredContacts]);
+      return;
+    } catch (error) {
+      setErrors(error.error);
     }
-
   }
 
   return (

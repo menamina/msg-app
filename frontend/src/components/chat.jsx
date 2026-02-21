@@ -23,7 +23,7 @@ function Chat({ activeChatUser }) {
           credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            withUserID: activeChatUser,
+            friendID: activeChatUser,
           }),
         });
 
@@ -55,6 +55,26 @@ function Chat({ activeChatUser }) {
   // must update this api to send in a form data so multer can accept
   async function sendMsg() {
     try {
+      if (fileToSend) {
+        const form = new FormData();
+        form.append("sendTo", sendToUser);
+        form.append("message", msgToSend);
+        form.append("fileOrImg", fileToSend);
+
+        const res = await fetch("http://localhost:5555/sendMsg", {
+          method: "POST",
+          credentials: "include",
+          body: form,
+        });
+
+        if (res.ok) {
+          setFileToSend(null);
+          setMsgToSend(null);
+        }
+
+        return;
+      }
+
       const res = await fetch("http://localhost:5555/sendMsg", {
         method: "POST",
         credentials: "include",
@@ -70,7 +90,6 @@ function Chat({ activeChatUser }) {
       if (!res.ok) {
         return;
       }
-      setFileToSend("");
       setMsgToSend("");
     } catch (error) {
       console.log(error);
