@@ -8,23 +8,44 @@ function Contacts() {
 
   useEffect(() => {
     async function getContacts() {
-      const res = await fetch("http://localhost:5555/getFriends", {
-        method: "GET",
-        credentials: "include",
-      });
+      try {
+        const res = await fetch("http://localhost:5555/getFriends", {
+          method: "GET",
+          credentials: "include",
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        setNoFriends(data.message);
-        return;
+        if (!res.ok) {
+          setNoFriends(data.message);
+          return;
+        }
+
+        setNoFriends(null);
+        setContacts(data.friends);
+      } catch (error) {
+        setErrors(error.message);
       }
-
-      setNoFriends(null);
-      setContacts(data.friends);
     }
     getContacts();
   }, []);
+
+  return (
+    <div>
+      {contacts && (
+        <div>
+          {contacts.map((contact) => {
+            <div key={contact.id}>
+              <div>
+                <div>message</div>
+                <div>delete</div>
+              </div>
+            </div>;
+          })}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Contacts;
