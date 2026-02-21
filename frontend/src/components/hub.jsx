@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import Chat from "./chat";
 
-// IF THERE ARE FRIEND REQUESTS SHOW THEM WITH A RED DOT OR SOMETHING AND THEN
-// WHEN USER CLICKS IT TAKES THEM TO FRIEND REQ COMP
-
 function Hub() {
   const { user, sideBar } = useOutletContext();
 
