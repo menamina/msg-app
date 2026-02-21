@@ -389,27 +389,18 @@ async function denyFriend(req, res) {
 
 async function deleteFriend(req, res) {
   try {
-    const { friendToDelete } = req.body;
-    const foundUserWEmail = await prisma.user.findUnique({
+    const { deleteThisID } = req.body;
+    const loggedInUserID = Number(req.user.id);
+    const ID = Number(deleteThisID);
+    await prisma.friends.delete({
       where: {
-        email: friendToDelete,
+        ownerId: loggedInUserID,
+        contactId: ID,
       },
     });
-
-    if (!foundUserWEmail) {
-      return res.status(401).json({ message: "Sorry no friend to delete" });
-    } else {
-      const id = Number(req.user.id);
-      await prisma.friends.delete({
-        where: {
-          ownerId: id,
-          contactId: foundUserWEmail.id,
-        },
-      });
-      res.status(200).json({ message: true });
-    }
+    return res.status(200).json({ message: true });
   } catch (error) {
-    something;
+    res.status(500).json({ error: "cannot delete friend" });
   }
 }
 

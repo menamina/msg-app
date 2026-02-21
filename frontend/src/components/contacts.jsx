@@ -30,7 +30,27 @@ function Contacts() {
     getContacts();
   }, []);
 
-  async function deleteFriend(contactID) {}
+  async function deleteFriend(contactID) {
+    try {
+      const res = await  fetch("http://localhost:5555/dltFriend", {
+          method: "GET",
+          credentials: "include",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            deleteThisID: contactID
+
+          })
+        });
+
+        if (!res.ok){
+          return 
+        } 
+        const filtedContacts = contacts.filter((contact) => contact.id !== contactID)
+        setContacts([filtedContacts])
+        return
+    }
+
+  }
 
   return (
     <div>
