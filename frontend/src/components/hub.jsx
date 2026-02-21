@@ -121,7 +121,7 @@ function Hub() {
           </div>
           <div>
             <img
-              src={`http://localhost:5555/${user.profile.pfp}`}
+              src={`http://localhost:5555/pfpIMG/${user.profile.pfp}`}
               alt="your profile image"
             ></img>
             <div onClick={profileOpts}>{user ? user.name : null}</div>
@@ -177,7 +177,7 @@ function Hub() {
                       <div>
                         <div>
                           <img
-                            src={`http://localhost:5555/${contact.profile.pfp}`}
+                            src={`http://localhost:5555/pfpIMG/${contact.profile.pfp}`}
                             alt="your profile image"
                           ></img>
                         </div>
@@ -204,7 +204,7 @@ function Hub() {
                         <div>
                           <div>
                             <img
-                              src={`http://localhost:5555/${convo.profile.pfp}`}
+                              src={`http://localhost:5555/pfpIMG/${convo.profile.pfp}`}
                               alt="your profile image"
                             ></img>
                           </div>
@@ -239,7 +239,7 @@ function Hub() {
                     <div>
                       <div>
                         <img
-                          src={`http://localhost:5555/${result.profile.pfp}`}
+                          src={`http://localhost:5555/pfpIMG/${result.profile.pfp}`}
                           alt="your profile image"
                         ></img>
                       </div>

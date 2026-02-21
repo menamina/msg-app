@@ -32,10 +32,23 @@ function Contacts() {
 
   return (
     <div>
+      {errors && <div>{errors}</div>}
+      {noFriends && <div>{noFriends}</div>}
       {contacts && (
         <div>
           {contacts.map((contact) => {
-            <div key={contact.id}>
+            <div key={contact.contactID}>
+              <div>
+                <div>
+                  <img
+                    src={`http://localhost:5555/${contact.contact.profile.pfp}`}
+                  ></img>
+                </div>
+                <div>
+                  <div>{contact.contact.name}</div>
+                  <div>@{contact.contact.username}</div>
+                </div>
+              </div>
               <div>
                 <div>message</div>
                 <div>delete</div>
