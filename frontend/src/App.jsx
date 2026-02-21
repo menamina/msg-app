@@ -11,6 +11,7 @@ function App() {
   useEffect(() => {
     async function checkIfSession() {
       const res = await fetch("http://localhost:5555/isThereASession", {
+        method: "GET",
         credentials: "include",
       });
       const data = await res.json();
@@ -19,6 +20,8 @@ function App() {
         return;
       }
       setUser(data.user);
+      navigate("/hub");
+      return;
     }
     checkIfSession();
   }, []);
@@ -36,7 +39,6 @@ function App() {
           return console.log("something");
         }
         setUserProfile(data.userInfo.profile);
-        navigate("/hub");
       } catch (err) {
         console.log(err);
       }
