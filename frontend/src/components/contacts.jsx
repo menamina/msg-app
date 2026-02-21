@@ -30,6 +30,8 @@ function Contacts() {
     getContacts();
   }, []);
 
+  async function deleteFriend(contactID) {}
+
   return (
     <div>
       {errors && <div>{errors}</div>}
@@ -41,7 +43,7 @@ function Contacts() {
               <div>
                 <div>
                   <img
-                    src={`http://localhost:5555/${contact.contact.profile.pfp}`}
+                    src={`http://localhost:5555/pfpIMG/${contact.contact.profile.pfp}`}
                   ></img>
                 </div>
                 <div>
@@ -51,7 +53,9 @@ function Contacts() {
               </div>
               <div>
                 <div>message</div>
-                <div>delete</div>
+                <div onClick={() => deleteFriend(contact.contactID)}>
+                  delete friend
+                </div>
               </div>
             </div>;
           })}
