@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: white;
 }
 
 .godDiv {
@@ -14,4 +15,9 @@
   width: 100%;
   height: 100%;
   background-image: url("../imgs/stars.jpg");
+}
+
+a,
+a:visited {
+  text-decoration: none;
 }
