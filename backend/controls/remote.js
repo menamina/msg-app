@@ -310,7 +310,7 @@ async function getFriendReqs(req, res) {
         .status(403)
         .json({ message: "You have no friend requests :(" });
     }
-    return res.json({ requests: returnedReqs });
+    return res.json({ requests: returnedReqs, success: true });
   } catch (error) {
     console.log(error);
   }

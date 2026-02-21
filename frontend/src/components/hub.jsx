@@ -22,6 +22,27 @@ function Hub() {
   );
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      async function getFriendReqInt() {
+        const res = fetch(`http://localhost:55555/getFriendReqs`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (res.status === 403) {
+          return;
+        }
+
+        setFriendReq(true);
+      }
+
+      getFriendReqInt;
+    }, 300);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     const timeout = setTimeout(() => {
       if (userSearch.trim() === "") {
         setUserSearchResults([]);
