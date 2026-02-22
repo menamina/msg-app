@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 import "../css/loginSignup.css";
 
-function Index() {
+function Login() {
   const { user, setUser } = useOutletContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,11 +38,11 @@ function Index() {
   }
 
   return (
-    <div className="indexDiv">
+    <div className="login-div">
       <div>
         {emailErr ? <div>{emailErr}</div> : null}
         {passErr ? <div>{passErr}</div> : null}
-        <form onSubmit={login}>
+        <form onSubmit={login} className="loginForm">
           <div>
             <label>Email:</label>
             <input
@@ -73,4 +73,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default Login;

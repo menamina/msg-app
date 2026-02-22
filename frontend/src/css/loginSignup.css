@@ -4,6 +4,24 @@
   box-sizing: border-box;
 }
 
-.signup {
+.signup,
+.login {
   color: black;
+}
+
+.login-div,
+.signup-div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+}
+
+.loginForm > div,
+.signUpForm > div {
+  display: flex;
+  justify-content: space-between;
 }

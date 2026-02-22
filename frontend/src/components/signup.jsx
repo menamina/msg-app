@@ -50,9 +50,9 @@ function Signup() {
   }
 
   return (
-    <div className="signup div">
+    <div className="signup-div">
       {signUpErrs ? signUpErrs.map((err, i) => <div key={i}>{err}</div>) : null}
-      <form onSubmit={signupAPI}>
+      <form onSubmit={signupAPI} className="loginForm">
         <div>
           <label htmlFor="">Name:</label>
           <input
@@ -96,7 +96,9 @@ function Signup() {
       </form>
       <div>
         <div>Already have an account?</div>
-        <Link to="/login">login</Link>
+        <Link to="/login" className="login">
+          login
+        </Link>
       </div>
     </div>
   );
