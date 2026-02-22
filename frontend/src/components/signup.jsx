@@ -92,7 +92,7 @@ function Signup() {
             onChange={(e) => setConfirmPass(e.target.value)}
           />
         </div>
-        <button>sign up</button>
+        <button class="signBtn">sign up</button>
       </form>
       <div>
         <div>Already have an account?</div>
