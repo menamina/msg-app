@@ -11,10 +11,16 @@ function Index() {
       </div>
 
       <div>
-        <Link to="/signup">Sign up</Link> today
+        <Link to="/signup" className=".indexLink">
+          Sign up
+        </Link>{" "}
+        today
       </div>
       <div>
-        Or if you already have an account, <Link to="/login">login</Link>
+        Or if you already have an account,{" "}
+        <Link to="/login" className=".indexLink">
+          login
+        </Link>
       </div>
     </div>
   );
