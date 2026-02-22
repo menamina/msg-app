@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
+import "../css/loginSignup";
+
 function Index() {
   const { user, setUser } = useOutletContext();
   const [email, setEmail] = useState("");
@@ -64,7 +66,9 @@ function Index() {
       </div>
       <div>
         <div>Dont already have an account?</div>
-        <Link to="/signup">sign up!</Link>
+        <Link to="/signup" className="signup">
+          sign up!
+        </Link>
       </div>
     </div>
   );
