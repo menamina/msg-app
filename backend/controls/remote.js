@@ -4,7 +4,7 @@ const path = require("path");
 
 async function signUp(req, res) {
   try {
-    const { name, email, password } = req.body;
+    const { name, username, email, password } = req.body;
 
     const emailInUse = await prisma.user.findUnique({
       where: { email: email },
