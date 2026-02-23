@@ -24,6 +24,11 @@
   background-size: cover;
 }
 
+.signup-div > div:last-child,
+.login-div > div:last-child {
+  text-align: center;
+}
+
 .loginForm,
 .signUpForm {
   display: flex;

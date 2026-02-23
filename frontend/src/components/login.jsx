@@ -6,8 +6,9 @@ function Login() {
   const { user, setUser } = useOutletContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailErr, setEmailErr] = useState("");
-  const [passErr, setPassErr] = useState("");
+  const [emailErr, setEmailErr] = useState(null);
+  const [passErr, setPassErr] = useState(null);
+  const [otherErr, setOtherErr] = useState(null);
   const navigate = useNavigate();
 
   async function login(e) {
@@ -33,13 +34,14 @@ function Login() {
         navigate("/hub");
       }
     } catch (error) {
-      console.log(error);
+      setOtherErr(error.message);
     }
   }
 
   return (
     <div className="login-div">
       <div>
+        {otherErr ? <div>{otherErr}</div> : null}
         {emailErr ? <div>{emailErr}</div> : null}
         {passErr ? <div>{passErr}</div> : null}
         <form onSubmit={login} className="loginForm">
