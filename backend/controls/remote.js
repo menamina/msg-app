@@ -21,10 +21,12 @@ async function signUp(req, res) {
         },
       });
 
-      const id = Number(createdUser.id);
+      const idNum = Number(createdUser.id);
       await prisma.profile.create({
         data: {
-          user: id,
+          prof: {
+            connect: { id: idNum },
+          },
         },
       });
 
@@ -34,7 +36,7 @@ async function signUp(req, res) {
     }
   } catch (error) {
     console.log(`error @ signUp controller: ${error.message}`);
-    return res.status(500).json({ message: "failed to create user" });
+    return res.status(500).json({ message: "Failed to create user" });
   }
 }
 
