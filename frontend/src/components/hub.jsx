@@ -3,7 +3,7 @@ import { Link, useOutletContext } from "react-router-dom";
 import Chat from "./chat";
 
 function Hub() {
-  const { user, sideBar } = useOutletContext();
+  const { user, userProfile, sideBar } = useOutletContext();
 
   const [friendReq, setFriendReq] = useState(false);
 
@@ -152,7 +152,7 @@ function Hub() {
           </div>
           <div>
             <img
-              src={`http://localhost:5555/pfpIMG/${user.profile.pfp}`}
+              src={`http://localhost:5555/pfpIMG/${userProfile.pfp}`}
               alt="your profile image"
             ></img>
             <div onClick={profileOpts}>{user ? user.name : null}</div>
