@@ -1,5 +1,6 @@
 const prisma = require("../prisma/client");
 const createPassword = require("../middleware/password");
+const path = require("path");
 
 async function signUp(req, res) {
   try {
@@ -12,11 +13,18 @@ async function signUp(req, res) {
     if (!emailInUse) {
       const passHash = await createPassword.createPassword(password);
 
-      await prisma.user.create({
+      const createdUser = await prisma.user.create({
         data: {
           name,
           email,
           saltedHash: passHash,
+        },
+      });
+
+      const id = Number(createdUser.id);
+      await prisma.profile.create({
+        data: {
+          user: id,
         },
       });
 
