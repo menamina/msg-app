@@ -337,15 +337,15 @@ async function getFriendReqs(req, res) {
 async function requestFriend(req, res) {
   try {
     const { friendToAdd } = req.body;
-    const foundUserWEmail = await prisma.user.findUnique({
+    const foundUserWUsername = await prisma.user.findUnique({
       where: {
-        email: friendToAdd,
+        username: friendToAdd,
       },
     });
-    if (!foundUserWEmail) {
+    if (!foundUserWUsername) {
       return res
         .status(401)
-        .json({ message: "No one was found with that email :(" });
+        .json({ message: "No one was found with that username :(" });
     } else {
       const id = Number(req.user.id);
       await prisma.friendreq.create({
@@ -357,7 +357,7 @@ async function requestFriend(req, res) {
       return res.status(200).json({ message: true });
     }
   } catch (error) {
-    something;
+    res.status(500).json({ message: "something went wrong; 500 error" });
   }
 }
 
@@ -533,7 +533,7 @@ async function friendSearch(req, res) {
         username: true,
         email: true,
         profile: {
-          pfp: true,
+          select: { pfp: true },
         },
       },
     });

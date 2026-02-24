@@ -116,24 +116,24 @@ function Hub() {
     setShowFriendSearch((prev) => !prev);
   }
 
-  async function sendFriendReq(userEmail) {
+  async function sendFriendReq() {
     try {
       const res = await fetch("http://localhost:5555/sendFriendReq", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
-          firnedToAdd: userEmail,
+          friendToAdd: userSearch,
         }),
       });
 
       const data = res.json();
 
       if (!res.ok) {
-        console.log(data.errors);
+        console.log(data.message);
         return;
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 
@@ -159,7 +159,7 @@ function Hub() {
                   <img></img>
                 </div>
               ) : (
-                <img></img>
+                <div></div>
               )}
             </Link>
           </div>
@@ -285,12 +285,7 @@ function Hub() {
               <div>
                 {userSearchResults.map((result) => (
                   <div key={result.id} className="userSearchResult">
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        sendFriendReq(result.email);
-                      }}
-                    >
+                    <form onSubmit={(e) => sendFriendReq(e, result.username)}>
                       <div>
                         <div>
                           <img
