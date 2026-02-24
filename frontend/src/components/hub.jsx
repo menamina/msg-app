@@ -24,7 +24,7 @@ function Hub() {
   useEffect(() => {
     const interval = setInterval(() => {
       async function getFriendReqInt() {
-        const res = fetch(`http://localhost:55555/getFriendReqs`, {
+        const res = fetch(`http://localhost:5555/getFriendReqs`, {
           method: "GET",
           credentials: "include",
         });
@@ -52,7 +52,7 @@ function Hub() {
       async function fetchResults() {
         try {
           const res = await fetch(
-            `http://localhost:55555/searchByUsername/search?query=${userSearch}`,
+            `http://localhost:5555/searchByUsername/search?query=${userSearch}`,
             {
               method: "GET",
               credentials: "include",
@@ -63,7 +63,7 @@ function Hub() {
 
           setUserSearchResults(data.userSearchResults);
         } catch (error) {
-          console.log(error);
+          console.log(error.message);
         }
       }
       fetchResults();
@@ -81,7 +81,7 @@ function Hub() {
       async function fetchResults() {
         try {
           const res = await fetch(
-            `http://localhost:55555/sideBarChatSearch/search?query=${msgSearchByContact}`,
+            `http://localhost:5555/sideBarChatSearch/search?query=${msgSearchByContact}`,
             {
               method: "GET",
               credentials: "include",
@@ -178,7 +178,7 @@ function Hub() {
           ) : null}
         </div>
       </div>
-      <div cclassName="sidebar+Msgs">
+      <div cclassName="sidebar-Msgs">
         <div className="sideBar">
           <div>
             <div>

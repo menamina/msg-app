@@ -540,7 +540,7 @@ async function friendSearch(req, res) {
 
     res.json({ friendSearchRes: results });
   } catch (error) {
-    console.log(error);
+    res.state(500).json({ message: "cannot search for friends atm" });
   }
 }
 
