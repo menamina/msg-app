@@ -145,7 +145,7 @@ function Hub() {
 
   const pfpSrc = userProfile?.pfp
     ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
-    : "";
+    : null;
 
   return (
     <div className="hubDiv">
@@ -163,8 +163,14 @@ function Hub() {
               )}
             </Link>
           </div>
-          <div>
-            <img src={pfpSrc} alt="your profile image"></img>
+          <div className="nav-profile">
+            {pfpSrc ? (
+              <img src={pfpSrc} alt="your profile image" />
+            ) : (
+              <div className="pfp-placeholder" aria-label="no profile image">
+                ?
+              </div>
+            )}
             <div onClick={profileOpts}>{user ? user.name : null}</div>
           </div>
           {showOpts ? (
@@ -217,10 +223,19 @@ function Hub() {
                     >
                       <div>
                         <div>
-                          <img
-                            src={`http://localhost:5555/pfpIMG/${contact.profile.pfp}`}
-                            alt="your profile image"
-                          ></img>
+                          {contact.profile?.pfp ? (
+                            <img
+                              src={`http://localhost:5555/pfpIMG/${contact.profile.pfp}`}
+                              alt="profile"
+                            />
+                          ) : (
+                            <div
+                              className="pfp-placeholder"
+                              aria-label="no profile image"
+                            >
+                              ?
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div>{contact.name}</div>
@@ -244,10 +259,19 @@ function Hub() {
                       >
                         <div>
                           <div>
-                            <img
-                              src={`http://localhost:5555/pfpIMG/${convo.profile.pfp}`}
-                              alt="your profile image"
-                            ></img>
+                            {convo.profile?.pfp ? (
+                              <img
+                                src={`http://localhost:5555/pfpIMG/${convo.profile.pfp}`}
+                                alt="profile"
+                              />
+                            ) : (
+                              <div
+                                className="pfp-placeholder"
+                                aria-label="no profile image"
+                              >
+                                ?
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div>{convo.toUser.name}</div>
@@ -288,10 +312,19 @@ function Hub() {
                     <form onSubmit={(e) => sendFriendReq(e, result.username)}>
                       <div>
                         <div>
-                          <img
-                            src={`http://localhost:5555/pfpIMG/${result.profile.pfp}`}
-                            alt="your profile image"
-                          ></img>
+                          {result.profile?.pfp ? (
+                            <img
+                              src={`http://localhost:5555/pfpIMG/${result.profile.pfp}`}
+                              alt="profile"
+                            />
+                          ) : (
+                            <div
+                              className="pfp-placeholder"
+                              aria-label="no profile image"
+                            >
+                              ?
+                            </div>
+                          )}
                         </div>
                       </div>
 
