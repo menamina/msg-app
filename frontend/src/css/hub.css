@@ -15,10 +15,21 @@
 
 .userNav {
   justify-content: space-between;
-  padding-bottom: 20px;
+  position: relative;
+  height: 50px;
   border-bottom: 1px solid gray;
 }
 
 .nav-profile {
   gap: 20px;
+}
+
+.sideBar {
+  border-right: 1px solid black;
+}
+
+.dropDown {
+  position: absolute;
+  z-index: 1;
+  top: 100%;
 }
