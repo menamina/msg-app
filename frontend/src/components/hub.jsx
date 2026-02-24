@@ -11,6 +11,7 @@ function Hub() {
 
   const [showOpts, setShowOpts] = useState(false);
   const [showFriendSearch, setShowFriendSearch] = useState(false);
+  const [noUsersFound, setNoUsersFound] = useState("");
   const [activeChatUser, setActiveChatUser] = useState(null);
 
   const [userSearch, setUserSearch] = useState("");
@@ -61,7 +62,14 @@ function Hub() {
 
           const data = await res.json();
 
-          setUserSearchResults(data.userSearchResults);
+          if (!res.ok) {
+            setNoUsersFound(data.noUsersFound || "No user(s) found");
+            setUserSearchResults([]);
+            return;
+          }
+
+          setNoUsersFound("");
+          setUserSearchResults(data.friendSearchRes || []);
         } catch (error) {
           console.log(error.message);
         }
@@ -90,7 +98,7 @@ function Hub() {
 
           const data = await res.json();
 
-          setMsgSearchByContactResults(data.usermsgSearchByContactResults);
+          setMsgSearchByContactResults(data.sideBarChatSearchRes || []);
         } catch (error) {
           console.log(error);
         }
@@ -178,7 +186,7 @@ function Hub() {
           ) : null}
         </div>
       </div>
-      <div cclassName="sidebar-Msgs">
+      <div className="sidebar-Msgs">
         <div className="sideBar">
           <div>
             <div>
@@ -273,11 +281,16 @@ function Hub() {
             </div>
           </div>
           <div className="searchResults">
-            {userSearchResults ? (
+            {userSearchResults.length > 0 ? (
               <div>
-                {userSearchResults.map((result) => {
+                {userSearchResults.map((result) => (
                   <div key={result.id} className="userSearchResult">
-                    <form onSubmit={sendFriendReq(result.email)}>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        sendFriendReq(result.email);
+                      }}
+                    >
                       <div>
                         <div>
                           <img
@@ -293,15 +306,15 @@ function Hub() {
                       </div>
 
                       <div>
-                        <button>add</button>
+                        <button type="submit">add</button>
                       </div>
                     </form>
-                  </div>;
-                })}
+                  </div>
+                ))}
               </div>
-            ) : (
-              <div>No user found</div>
-            )}
+            ) : userSearch.trim() !== "" ? (
+              <div>{noUsersFound || "No user found"}</div>
+            ) : null}
           </div>
         </div>
       )}

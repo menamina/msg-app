@@ -522,7 +522,7 @@ async function friendSearch(req, res) {
     const { query } = req.query;
     const results = await prisma.user.findMany({
       where: {
-        name: {
+        username: {
           contains: query,
           mode: "insensitive",
         },
@@ -538,9 +538,12 @@ async function friendSearch(req, res) {
       },
     });
 
-    res.json({ friendSearchRes: results });
+    if (!results) {
+      return res.status(403).json({ noUsersFound: "No user(s) found" });
+    }
+    return res.json({ friendSearchRes: results });
   } catch (error) {
-    res.state(500).json({ message: "cannot search for friends atm" });
+    return res.status(500).json({ message: "cannot search for friends atm" });
   }
 }
 
