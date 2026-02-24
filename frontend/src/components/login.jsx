@@ -24,8 +24,6 @@ function Login() {
         }),
       });
       const data = await res.json();
-      const text = await res.text();
-      console.log(text);
       if (!res.ok) {
         data.message === "invalid email"
           ? setEmailErr("Invalid email")
@@ -36,14 +34,14 @@ function Login() {
         navigate("/hub");
       }
     } catch (error) {
-      setOtherErr(error.message);
+      setOtherErr(error);
     }
   }
 
   return (
     <div className="login-div">
       <div>
-        {otherErr ? <div>{otherErr}</div> : null}
+        {/* {otherErr ? <div>{otherErr}</div> : null} */}
         {emailErr ? <div>{emailErr}</div> : null}
         {passErr ? <div>{passErr}</div> : null}
         <form onSubmit={login} className="loginForm">
