@@ -9,6 +9,7 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [signUpErrs, setSignUpErrs] = useState([]);
+  const [otherErrs, setOtherErrs] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,12 +48,13 @@ function Signup() {
         navigate("/login");
       }
     } catch (error) {
-      console.log("something went wrong trying to signup", error.message);
+      setOtherErrs(error.message);
     }
   }
 
   return (
     <div className="signup-div">
+      {otherErrs && <div>{otherErrs}</div>}
       {signUpErrs ? signUpErrs.map((err, i) => <div key={i}>{err}</div>) : null}
       <form onSubmit={signupAPI} className="loginForm">
         <div>

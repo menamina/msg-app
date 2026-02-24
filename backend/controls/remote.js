@@ -19,6 +19,7 @@ async function signUp(req, res) {
         data: {
           name,
           email,
+          username,
           saltedHash: passHash,
         },
       });
