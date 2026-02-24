@@ -10,9 +10,11 @@ async function signUp(req, res) {
       where: { email: email },
     });
 
-    if (!emailInUse) {
-      const passHash = await createPassword.createPassword(password);
+    const userNameInUse = await prisma.user.findUnique({
+      where: { username: username },
+    });
 
+    if (!emailInUse && !userNameInUse) {
       const createdUser = await prisma.user.create({
         data: {
           name,
@@ -22,6 +24,7 @@ async function signUp(req, res) {
       });
 
       const idNum = Number(createdUser.id);
+
       await prisma.profile.create({
         data: {
           prof: {
@@ -29,10 +32,13 @@ async function signUp(req, res) {
           },
         },
       });
-
       return res.status(200).json({ success: true });
-    } else {
+    }
+
+    if (emailInUse) {
       return res.status(401).json({ message: "Email is taken" });
+    } else if (userNameInUse) {
+      return res.status(401).json({ message: "Username is taken" });
     }
   } catch (error) {
     console.log(`error @ signUp controller: ${error.message}`);

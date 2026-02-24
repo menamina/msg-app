@@ -24,6 +24,8 @@ function Login() {
         }),
       });
       const data = await res.json();
+      const text = await res.text();
+      console.log(text);
       if (!res.ok) {
         data.message === "invalid email"
           ? setEmailErr("Invalid email")

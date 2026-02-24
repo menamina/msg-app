@@ -5,6 +5,7 @@ function Signup() {
   const { user } = useOutletContext();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [signUpErrs, setSignUpErrs] = useState([]);
@@ -24,6 +25,7 @@ function Signup() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
+          username: username,
           email,
           password,
           confirmPassword: confirmPass,
@@ -60,6 +62,16 @@ function Signup() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="">Username:</label>
+          <input
+            name="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUserName(e.target.value)}
           />
         </div>
 
