@@ -48,14 +48,15 @@ function Settings() {
     navigate("/hub");
   }
 
+  const pfpSrc = userProfile?.pfp
+    ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
+    : "";
+
   return (
     <div className="profileDiv">
       <div>
         <div>
-          <img
-            src={`http://localhost:5555/${userProfile.profile.pfp}`}
-            alt="your profile image"
-          />
+          <img src={pfpSrc} alt="your profile image" />
         </div>
         <div>{userProfile.name}</div>
       </div>

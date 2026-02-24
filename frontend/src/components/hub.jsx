@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useOutletContext } from "react-router-dom";
 import Chat from "./chat";
+import "../css/hub.css";
 
 function Hub() {
   const { user, setUser, userProfile, setUserProfile, sideBar } =
@@ -9,6 +10,7 @@ function Hub() {
   const [friendReq, setFriendReq] = useState(false);
 
   const [showOpts, setShowOpts] = useState(false);
+  const [showFriendSearch, setShowFriendSearch] = useState(false);
   const [activeChatUser, setActiveChatUser] = useState(null);
 
   const [userSearch, setUserSearch] = useState("");
@@ -99,12 +101,11 @@ function Hub() {
   }, [msgSearchByContact]);
 
   function profileOpts() {
-    setShowOpts(true);
+    setShowOpts((prev) => !prev);
   }
 
   function openFriendSearchBar() {
-    const searchDiv = document.querySelector("search");
-    searchDiv.classList.remove("hidden");
+    setShowFriendSearch((prev) => !prev);
   }
 
   async function sendFriendReq(userEmail) {
@@ -129,8 +130,7 @@ function Hub() {
   }
 
   function clearUserSearch() {
-    const searchDiv = document.querySelector("search");
-    searchDiv.classList.add("hidden");
+    setShowFriendSearch(false);
     setUserSearch("");
     setUserSearchResults([]);
   }
@@ -160,7 +160,7 @@ function Hub() {
             <div onClick={profileOpts}>{user ? user.name : null}</div>
           </div>
           {showOpts ? (
-            <div className="dropDown hidden">
+            <div className="dropDown">
               <div>
                 <div>
                   <div>@{user.name}</div>
@@ -259,50 +259,52 @@ function Hub() {
         />
       </div>
 
-      <div className="search hidden">
-        <div>
-          <label>search for a friend by username</label>
-          <input
-            value={userSearch}
-            onChange={(e) => setUserSearch(e.target.value)}
-            placeholder="Search.."
-          ></input>
+      {showFriendSearch && (
+        <div className="search">
           <div>
-            <button onClick={clearUserSearch}>cancel</button>
+            <label>search for a friend by username</label>
+            <input
+              value={userSearch}
+              onChange={(e) => setUserSearch(e.target.value)}
+              placeholder="Search.."
+            ></input>
+            <div>
+              <button onClick={clearUserSearch}>cancel</button>
+            </div>
+          </div>
+          <div className="searchResults">
+            {userSearchResults ? (
+              <div>
+                {userSearchResults.map((result) => {
+                  <div key={result.id} className="userSearchResult">
+                    <form onSubmit={sendFriendReq(result.email)}>
+                      <div>
+                        <div>
+                          <img
+                            src={`http://localhost:5555/pfpIMG/${result.profile.pfp}`}
+                            alt="your profile image"
+                          ></img>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p>{result.name}</p>
+                        <p>@{result.username}</p>
+                      </div>
+
+                      <div>
+                        <button>add</button>
+                      </div>
+                    </form>
+                  </div>;
+                })}
+              </div>
+            ) : (
+              <div>No user found</div>
+            )}
           </div>
         </div>
-        <div className="searchResults">
-          {userSearchResults ? (
-            <div>
-              {userSearchResults.map((result) => {
-                <div key={result.id} className="userSearchResult">
-                  <form onSubmit={sendFriendReq(result.email)}>
-                    <div>
-                      <div>
-                        <img
-                          src={`http://localhost:5555/pfpIMG/${result.profile.pfp}`}
-                          alt="your profile image"
-                        ></img>
-                      </div>
-                    </div>
-
-                    <div>
-                      <p>{result.name}</p>
-                      <p>@{result.username}</p>
-                    </div>
-
-                    <div>
-                      <button>add</button>
-                    </div>
-                  </form>
-                </div>;
-              })}
-            </div>
-          ) : (
-            <div>No user found</div>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
