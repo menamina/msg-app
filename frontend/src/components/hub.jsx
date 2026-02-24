@@ -134,6 +134,10 @@ function Hub() {
     setUserSearchResults([]);
   }
 
+  const pfpSrc = userProfile?.pfp
+    ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
+    : "";
+
   return (
     <div className="hubDiv">
       <div className="userNav">
@@ -151,10 +155,7 @@ function Hub() {
             </Link>
           </div>
           <div>
-            <img
-              src={`http://localhost:5555/pfpIMG/${userProfile.pfp}`}
-              alt="your profile image"
-            ></img>
+            <img src={pfpSrc} alt="your profile image"></img>
             <div onClick={profileOpts}>{user ? user.name : null}</div>
           </div>
           {showOpts ? (

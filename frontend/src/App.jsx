@@ -19,6 +19,7 @@ function App() {
         setUser(null);
         return;
       }
+
       setUser(data.user);
       navigate("/hub");
       return;
@@ -30,7 +31,7 @@ function App() {
     if (!user) return;
     async function getMsgs() {
       try {
-        const res = await fetch("http://localhost:5555/getUserProfile", {
+        const res = await fetch("http://localhost:5555/hub", {
           method: "GET",
           credentials: "include",
         });
@@ -39,6 +40,7 @@ function App() {
           return console.log("something");
         }
         setUserProfile(data.userInfo.profile);
+        navigate("/hub");
       } catch (err) {
         console.log(err);
       }
