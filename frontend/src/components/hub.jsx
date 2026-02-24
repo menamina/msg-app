@@ -156,7 +156,7 @@ function Hub() {
             <Link to="/hub/friend-requests">
               {friendReq ? (
                 <div className="symbolIfFriendReq">
-                  <img></img>
+                  <img />
                 </div>
               ) : (
                 <div></div>

@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 
 function Settings() {
   const { user, setUser, userProfile, setUserProfile } = useOutletContext();
-  const [portrait, setPortrait] = useState(userProfile.pfp);
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
+  const [portrait, setPortrait] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [currentPass, setCurrentPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || !userProfile) return;
+    setPortrait(userProfile.pfp);
+    setName(user.name);
+    setEmail(user.email);
+  }, [user, userProfile]);
 
   async function updateProfile(e) {
     e.preventDefault();
@@ -48,7 +55,9 @@ function Settings() {
     navigate("/hub");
   }
 
-  const pfpSrc = userProfile?.pfp
+  if (!user || !userProfile) return null;
+
+  const pfpSrc = userProfile.pfp
     ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
     : "";
 
@@ -66,11 +75,10 @@ function Settings() {
           <form onSubmit={updateProfile}>
             <div>
               <label htmlFor="">Portrait:</label>
-              <img>portrait here</img>
+              <img />
               <input
                 type="file"
                 name="file"
-                value={portrait}
                 onChange={(e) => setPortrait(e.target.value)}
               />
             </div>
