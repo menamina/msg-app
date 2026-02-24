@@ -14,6 +14,13 @@
   color: white;
 }
 
+.login-div a,
+.login-div a:visited,
+.signup-div a,
+.signup-div a:visited {
+  color: white;
+}
+
 .signup,
 .login {
   text-align: center;

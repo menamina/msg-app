@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, Outlet, useOutletContext } from "react-router-dom";
 import Chat from "./chat";
 
 function Hub() {
-  const { user, userProfile, sideBar } = useOutletContext();
+  const { user, setUser, userProfile, setUserProfile, sideBar } =
+    useOutletContext();
 
   const [friendReq, setFriendReq] = useState(false);
 
@@ -144,7 +145,7 @@ function Hub() {
         <div>Cyberspace</div>
         <div>
           <div>
-            <Link to="/friendReq">
+            <Link to="/hub/friend-requests">
               {friendReq ? (
                 <div className="symbolIfFriendReq">
                   <img></img>
@@ -163,14 +164,14 @@ function Hub() {
               <div>
                 <div>
                   <div>@{user.name}</div>
-                  <div>@{user.email}</div>
+                  <div>{user.email}</div>
                   <div>
-                    <Link to="/settings">settings</Link>
+                    <Link to="/hub/settings">settings</Link>
                   </div>
                 </div>
               </div>
               <div>
-                <Link to="/contacts">contacts</Link>
+                <Link to="/hub/contacts">contacts</Link>
               </div>
               <div>logout</div>
             </div>
@@ -181,7 +182,7 @@ function Hub() {
         <div className="sideBar">
           <div>
             <div>
-              <Link to="/newMsg">new message</Link>
+              <Link to="/hub/new">new message</Link>
             </div>
           </div>
           <div>
@@ -248,6 +249,14 @@ function Hub() {
           </div>
         </div>
         <Chat activeChatUser={activeChatUser}></Chat>
+        <Outlet
+          context={{
+            user,
+            setUser,
+            userProfile,
+            setUserProfile,
+          }}
+        />
       </div>
 
       <div className="search hidden">
