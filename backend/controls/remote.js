@@ -15,6 +15,7 @@ async function signUp(req, res) {
     });
 
     if (!emailInUse && !userNameInUse) {
+      const passHash = await createPassword.createPassword(password);
       const createdUser = await prisma.user.create({
         data: {
           name,
