@@ -56,7 +56,6 @@ function Settings() {
   }
 
   if (!user || !userProfile) return null;
-
   const pfpSrc = userProfile.pfp
     ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
     : "";

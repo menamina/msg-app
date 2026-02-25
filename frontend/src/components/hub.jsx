@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link, Outlet, useOutletContext } from "react-router-dom";
+import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import Chat from "./chat";
 import "../css/hub.css";
 
 function Hub() {
   const { user, setUser, userProfile, setUserProfile, sideBar } =
     useOutletContext();
+
+  const nav = useNavigate();
 
   const [friendReq, setFriendReq] = useState(false);
 
@@ -143,6 +145,23 @@ function Hub() {
     setUserSearchResults([]);
   }
 
+  async function logout() {
+    try {
+      const res = await fetch("http://localhost:5555/signout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        return console.log(res.error);
+      }
+      setUser(null);
+      setUserProfile(null);
+      nav("/");
+    } catch (error) {
+      console.log(error.err.message);
+    }
+  }
+
   const pfpSrc = userProfile?.pfp
     ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
     : null;
@@ -187,7 +206,7 @@ function Hub() {
               <div>
                 <Link to="/hub/contacts">contacts</Link>
               </div>
-              <div>logout</div>
+              <div onClick={logout}>logout</div>
             </div>
           ) : null}
         </div>

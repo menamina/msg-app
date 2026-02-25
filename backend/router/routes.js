@@ -42,7 +42,7 @@ router.post("/signout", (req, res, next) => {
       return next(err);
     }
     res.clearCookie("connect.sid");
-    res.redirect("/");
+    res.status(200).json({ ok: true });
   });
 });
 
