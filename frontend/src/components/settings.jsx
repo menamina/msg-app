@@ -58,7 +58,7 @@ function Settings() {
   if (!user || !userProfile) return null;
   const pfpSrc = userProfile.pfp
     ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
-    : "";
+    : "http://localhost:5555/pfpIMG/default-avatar.png";
 
   return (
     <div className="profileDiv">

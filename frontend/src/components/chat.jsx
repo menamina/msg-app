@@ -52,7 +52,6 @@ function Chat({ activeChatUser }) {
     addFile.className.remove("hidden");
   }
 
-  // must update this api to send in a form data so multer can accept
   async function sendMsg() {
     try {
       if (fileToSend) {

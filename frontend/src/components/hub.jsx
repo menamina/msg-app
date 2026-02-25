@@ -173,9 +173,10 @@ function Hub() {
     }
   }
 
+  const defaultPfp = "http://localhost:5555/pfpIMG/default-avatar.png";
   const pfpSrc = userProfile?.pfp
     ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
-    : null;
+    : defaultPfp;
 
   if (!user) return null;
 
@@ -196,13 +197,7 @@ function Hub() {
             </Link>
           </div>
           <div className="nav-profile">
-            {pfpSrc ? (
-              <img src={pfpSrc} alt="your profile image" />
-            ) : (
-              <div className="pfp-placeholder" aria-label="no profile image">
-                ?
-              </div>
-            )}
+            <img src={pfpSrc} alt="your profile image" />
             <div onClick={profileOpts}>{user ? user.name : null}</div>
           </div>
           {showOpts ? (
@@ -255,19 +250,14 @@ function Hub() {
                     >
                       <div>
                         <div>
-                          {contact.profile?.pfp ? (
-                            <img
-                              src={`http://localhost:5555/pfpIMG/${contact.profile.pfp}`}
-                              alt="profile"
-                            />
-                          ) : (
-                            <div
-                              className="pfp-placeholder"
-                              aria-label="no profile image"
-                            >
-                              ?
-                            </div>
-                          )}
+                          <img
+                            src={
+                              contact.profile?.pfp
+                                ? `http://localhost:5555/pfpIMG/${contact.profile.pfp}`
+                                : defaultPfp
+                            }
+                            alt="profile"
+                          />
                         </div>
                       </div>
                       <div>{contact.name}</div>
@@ -291,19 +281,14 @@ function Hub() {
                       >
                         <div>
                           <div>
-                            {convo.profile?.pfp ? (
-                              <img
-                                src={`http://localhost:5555/pfpIMG/${convo.profile.pfp}`}
-                                alt="profile"
-                              />
-                            ) : (
-                              <div
-                                className="pfp-placeholder"
-                                aria-label="no profile image"
-                              >
-                                ?
-                              </div>
-                            )}
+                          <img
+                            src={
+                              convo.profile?.pfp
+                                ? `http://localhost:5555/pfpIMG/${convo.profile.pfp}`
+                                : defaultPfp
+                            }
+                            alt="profile"
+                          />
                           </div>
                         </div>
                         <div>{convo.toUser.name}</div>
@@ -344,19 +329,14 @@ function Hub() {
                     <form onSubmit={(e) => sendFriendReq(e, result.username)}>
                       <div>
                         <div>
-                          {result.profile?.pfp ? (
-                            <img
-                              src={`http://localhost:5555/pfpIMG/${result.profile.pfp}`}
-                              alt="profile"
-                            />
-                          ) : (
-                            <div
-                              className="pfp-placeholder"
-                              aria-label="no profile image"
-                            >
-                              ?
-                            </div>
-                          )}
+                          <img
+                            src={
+                              result.profile?.pfp
+                                ? `http://localhost:5555/pfpIMG/${result.profile.pfp}`
+                                : defaultPfp
+                            }
+                            alt="profile"
+                          />
                         </div>
                       </div>
 
