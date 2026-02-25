@@ -47,7 +47,7 @@ router.post("/signout", (req, res, next) => {
 });
 
 router.get("/hub", isAuth, remote.getUserProfile);
-router.get("/getMsgs", isAuth, remote.getMsgs);
+router.post("/getMsgs", isAuth, remote.getMsgs);
 router.get("/pfpIMG/:image", isAuth, remote.sendIMGS);
 
 router.get("/sideBarChatSearch/search", isAuth, remote.sideBarChatSearch);

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import Chat from "./chat";
 import "../css/hub.css";
@@ -33,23 +34,30 @@ function Hub() {
   useEffect(() => {
     const interval = setInterval(() => {
       async function getFriendReqInt() {
-        const res = fetch(`http://localhost:5555/getFriendReqs`, {
+        const res = await fetch(`http://localhost:5555/getFriendReqs`, {
           method: "GET",
           credentials: "include",
         });
 
-        if (res.status === 403) {
+        if (res.status === 401) {
+          setUser(null);
+          setUserProfile(null);
+          nav("/");
           return;
         }
-
-        setFriendReq(true);
+        if (res.status === 403) {
+          return;
+        } else {
+          setFriendReq(true);
+          return;
+        }
       }
 
-      getFriendReqInt;
-    }, 300);
+      getFriendReqInt();
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [nav, setUser, setUserProfile]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -70,6 +78,12 @@ function Hub() {
 
           const data = await res.json();
 
+          if (res.status === 401) {
+            setUser(null);
+            setUserProfile(null);
+            nav("/");
+            return;
+          }
           if (!res.ok) {
             setNoUsersFound(data.noUsersFound || "No user(s) found");
             setUserSearchResults([]);
@@ -106,6 +120,12 @@ function Hub() {
 
           const data = await res.json();
 
+          if (res.status === 401) {
+            setUser(null);
+            setUserProfile(null);
+            nav("/");
+            return;
+          }
           setMsgSearchByContactResults(data.sideBarChatSearchRes || []);
         } catch (error) {
           console.log(error);
@@ -141,6 +161,12 @@ function Hub() {
 
       const data = await res.json();
 
+      if (res.status === 401) {
+        setUser(null);
+        setUserProfile(null);
+        nav("/");
+        return;
+      }
       if (!res.ok) {
         console.log(data.message);
         return;
@@ -281,14 +307,14 @@ function Hub() {
                       >
                         <div>
                           <div>
-                          <img
-                            src={
-                              convo.profile?.pfp
-                                ? `http://localhost:5555/pfpIMG/${convo.profile.pfp}`
-                                : defaultPfp
-                            }
-                            alt="profile"
-                          />
+                            <img
+                              src={
+                                convo.profile?.pfp
+                                  ? `http://localhost:5555/pfpIMG/${convo.profile.pfp}`
+                                  : defaultPfp
+                              }
+                              alt="profile"
+                            />
                           </div>
                         </div>
                         <div>{convo.toUser.name}</div>

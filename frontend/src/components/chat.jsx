@@ -19,7 +19,7 @@ function Chat({ activeChatUser }) {
     async function openConvo() {
       try {
         const res = await fetch("http://localhost:5555/getMsgs", {
-          method: "GET",
+          method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -29,6 +29,9 @@ function Chat({ activeChatUser }) {
 
         const data = await res.json();
 
+        if (res.status === 401) {
+          return;
+        }
         if (!res.ok) {
           return;
         } else {
@@ -49,10 +52,11 @@ function Chat({ activeChatUser }) {
 
   function showAddFileInput() {
     const addFile = document.querySelector(".addFile");
-    addFile.className.remove("hidden");
+    addFile.classList.remove("hidden");
   }
 
-  async function sendMsg() {
+  async function sendMsg(e) {
+    e.preventDefault();
     try {
       if (fileToSend) {
         const form = new FormData();
@@ -167,8 +171,7 @@ function Chat({ activeChatUser }) {
                   <input
                     className="addFile hidden"
                     type="file"
-                    value={fileToSend}
-                    onChange={(e) => setFileToSend(e.target.value)}
+                    onChange={(e) => setFileToSend(e.target.files[0])}
                   ></input>
                 </div>
               </div>
