@@ -346,16 +346,21 @@ async function requestFriend(req, res) {
       return res
         .status(401)
         .json({ message: "No one was found with that username :(" });
-    } else {
-      const id = Number(req.user.id);
-      await prisma.friendreq.create({
-        data: {
-          sentBy: id,
-          sentTo: foundUserWEmail.id,
-        },
-      });
-      return res.status(200).json({ message: true });
     }
+
+    // prevent sending to self
+    if (foundUserWUsername.id === req.user.id) {
+      return res.status(400).json({ message: "Cannot add yourself" });
+    }
+
+    const id = Number(req.user.id);
+    await prisma.friendreq.create({
+      data: {
+        sentBy: id,
+        sentTo: foundUserWUsername.id,
+      },
+    });
+    return res.status(200).json({ message: true });
   } catch (error) {
     res.status(500).json({ message: "something went wrong; 500 error" });
   }

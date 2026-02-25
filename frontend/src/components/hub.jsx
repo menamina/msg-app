@@ -124,17 +124,22 @@ function Hub() {
     setShowFriendSearch((prev) => !prev);
   }
 
-  async function sendFriendReq() {
+  async function sendFriendReq(e, username) {
+    if (e) e.preventDefault();
+    if (!username || !user) return;
+
+    if (username === user.username) return;
     try {
       const res = await fetch("http://localhost:5555/sendFriendReq", {
         method: "POST",
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          friendToAdd: userSearch,
+          friendToAdd: username,
         }),
       });
 
-      const data = res.json();
+      const data = await res.json();
 
       if (!res.ok) {
         console.log(data.message);
@@ -361,7 +366,9 @@ function Hub() {
                       </div>
 
                       <div>
-                        <button type="submit">add</button>
+                        {result.id === user.id ? null : (
+                          <button type="submit">add</button>
+                        )}
                       </div>
                     </form>
                   </div>
