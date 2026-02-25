@@ -25,6 +25,12 @@ function Hub() {
   );
 
   useEffect(() => {
+    if (!user) {
+      nav("/");
+    }
+  }, [user, nav]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       async function getFriendReqInt() {
         const res = fetch(`http://localhost:5555/getFriendReqs`, {
@@ -165,6 +171,8 @@ function Hub() {
   const pfpSrc = userProfile?.pfp
     ? `http://localhost:5555/pfpIMG/${userProfile.pfp}`
     : null;
+
+  if (!user) return null;
 
   return (
     <div className="hubDiv">
