@@ -60,6 +60,7 @@ function Signup() {
         <div>
           <label htmlFor="">Name:</label>
           <input
+            className="signupInput"
             name="name"
             type="text"
             value={name}
@@ -70,6 +71,7 @@ function Signup() {
         <div>
           <label htmlFor="">Username:</label>
           <input
+            className="signupInput"
             name="username"
             type="text"
             value={username}
@@ -80,6 +82,7 @@ function Signup() {
         <div>
           <label htmlFor="">Email:</label>
           <input
+            className="signupInput"
             name="email"
             type="text"
             value={email}
@@ -90,6 +93,7 @@ function Signup() {
         <div>
           <label htmlFor="">Password</label>
           <input
+            className="signupInput"
             name="password"
             type="password"
             value={password}
@@ -100,6 +104,7 @@ function Signup() {
         <div>
           <label htmlFor="">Confirm Password:</label>
           <input
+            className="signupInput"
             name="confirmPassword"
             type="password"
             value={confirmPass}

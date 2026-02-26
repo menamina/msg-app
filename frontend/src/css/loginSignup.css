@@ -21,6 +21,13 @@
   color: white;
 }
 
+.login-div input,
+.signup-div input,
+.login-div input::placeholder,
+.signup-div input::placeholder {
+  color: black;
+}
+
 .signup,
 .login {
   text-align: center;
