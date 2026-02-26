@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
-import Chat from "./chat";
 import "../css/hub.css";
 
 function Hub() {
@@ -325,15 +324,18 @@ function Hub() {
                   })}
           </div>
         </div>
-        <Chat activeChatUser={activeChatUser}></Chat>
-        <Outlet
-          context={{
-            user,
-            setUser,
-            userProfile,
-            setUserProfile,
-          }}
-        />
+        <div className="mainPane">
+          <Outlet
+            context={{
+              user,
+              setUser,
+              userProfile,
+              setUserProfile,
+              activeChatUser,
+              setActiveChatUser,
+            }}
+          />
+        </div>
       </div>
 
       {showFriendSearch && (

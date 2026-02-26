@@ -348,7 +348,6 @@ async function requestFriend(req, res) {
         .json({ message: "No one was found with that username :(" });
     }
 
-    // prevent sending to self
     if (foundUserWUsername.id === req.user.id) {
       return res.status(400).json({ message: "Cannot add yourself" });
     }

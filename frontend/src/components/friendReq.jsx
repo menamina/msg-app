@@ -79,7 +79,7 @@ function FriendReq() {
   }
 
   return (
-    <div>
+    <div className="friendReq">
       {errors && <div>{errors}</div>}
       {noFriendReqsMsg && <div>{noFriendReqsMsg}</div>}
       {friendRequests && (
