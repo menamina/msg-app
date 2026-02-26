@@ -9,7 +9,9 @@
 
 .sideBar-Msgs,
 .nav-profile,
-.userNav {
+.userNav,
+.sideBar,
+.navRight {
   display: flex;
 }
 
@@ -20,22 +22,36 @@
   border-bottom: 1px solid gray;
 }
 
-.nav-profile {
-  gap: 20px;
+.navRight {
+  width: 20%;
+  justify-content: flex-end;
   align-items: center;
+  gap: 2rem;
 }
 
-.sideBar {
-  border-right: 1px solid black;
+.nav-profile {
+  gap: 2rem;
+  height: 100%;
 }
 
 .dropDown {
   position: absolute;
   z-index: 1;
   top: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border: 1px solid black;
+  width: 20%;
 }
 
-.pfp {
-  height: 100%;
-  width: 60px;
+.sideBar {
+  flex-direction: column;
+  width: 19%;
+  border-right: 1px solid black;
+  gap: 25px;
+}
+
+.searchMsgs {
+  width: 90%;
 }

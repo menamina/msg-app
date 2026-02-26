@@ -209,7 +209,7 @@ function Hub() {
     <div className="hubDiv">
       <div className="userNav">
         <div>Cyberspace</div>
-        <div>
+        <div className="navRight">
           <div>
             <Link to="/hub/friend-requests">
               {friendReq ? (
@@ -217,7 +217,7 @@ function Hub() {
                   <img />
                 </div>
               ) : (
-                <div></div>
+                <div>hhhd</div>
               )}
             </Link>
           </div>
@@ -258,6 +258,7 @@ function Hub() {
           </div>
           <div>
             <input
+              className="searchMsgs"
               name="search chats by user"
               placeholder="Search"
               value={msgSearchByContact}
