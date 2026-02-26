@@ -16,12 +16,13 @@
 .userNav {
   justify-content: space-between;
   position: relative;
-  height: 50px;
+  height: 60px;
   border-bottom: 1px solid gray;
 }
 
 .nav-profile {
   gap: 20px;
+  align-items: center;
 }
 
 .sideBar {
@@ -32,4 +33,9 @@
   position: absolute;
   z-index: 1;
   top: 100%;
+}
+
+.pfp {
+  height: 100%;
+  width: 60px;
 }

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useState, useEffect } from "react";
 import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import Chat from "./chat";
 import "../css/hub.css";
@@ -223,8 +222,8 @@ function Hub() {
             </Link>
           </div>
           <div className="nav-profile">
-            <img src={pfpSrc} alt="your profile image" />
-            <div onClick={profileOpts}>{user ? user.name : null}</div>
+            <img src={pfpSrc} alt="your profile image" className="pfp" />
+            <p onClick={profileOpts}>{user ? user.name : null}</p>
           </div>
           {showOpts ? (
             <div className="dropDown">
@@ -277,6 +276,7 @@ function Hub() {
                       <div>
                         <div>
                           <img
+                            className="pfp"
                             src={
                               contact.profile?.pfp
                                 ? `http://localhost:5555/pfpIMG/${contact.profile.pfp}`
@@ -308,6 +308,7 @@ function Hub() {
                         <div>
                           <div>
                             <img
+                              className="pfp"
                               src={
                                 convo.profile?.pfp
                                   ? `http://localhost:5555/pfpIMG/${convo.profile.pfp}`
@@ -356,6 +357,7 @@ function Hub() {
                       <div>
                         <div>
                           <img
+                            className="pfp"
                             src={
                               result.profile?.pfp
                                 ? `http://localhost:5555/pfpIMG/${result.profile.pfp}`
