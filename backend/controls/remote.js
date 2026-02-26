@@ -100,17 +100,17 @@ async function getUserProfile(req, res) {
       },
       include: {
         profile: true,
-        friends: true,
       },
     });
 
     if (!userProfSettings) {
-      return res.status(401).status({ message: "no user found" });
+      return res.status(401).json({ message: "no user found" });
     } else {
       res.json({ userInfo: userProfSettings });
     }
   } catch (error) {
-    console.log("error");
+    console.log("getUserProfile error:", error.message);
+    res.status(500).json({ message: "failed to load user profile" });
   }
 }
 

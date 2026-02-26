@@ -12,7 +12,7 @@ model User {
   username        String    @unique
   email           String    @unique
   saltedHash      String
-  profile         Profile[]
+  profile         Profile?  @relation("UserProfile")
 
   sent            Message[] @relation("SentMessages")
   received        Message[] @relation("ReceivedMessages")
@@ -63,8 +63,8 @@ model FriendReq {
 
 model Profile {
   id     Int @id @default(autoincrement())
-  user Int @unique
-  pfp String @default("default-avatar.png")
+  user   Int  @unique
+  pfp    String @default("default-avatar.png")
 
-  prof User @relation(fields: [user], references:[id])
+  prof   User @relation("UserProfile", fields: [user], references: [id])
 }

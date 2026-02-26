@@ -11,7 +11,9 @@ function Settings() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user || !userProfile) return;
+    if (!user || !userProfile) {
+      return;
+    }
     setPortrait(userProfile.pfp);
     setName(user.name);
     setEmail(user.email);
@@ -32,7 +34,7 @@ function Settings() {
     try {
       const res = await fetch("http://localhost:5555/updateProfile", {
         method: "PATCH",
-        credentials: "incluide",
+        credentials: "include",
         body: form,
       });
 
@@ -78,7 +80,7 @@ function Settings() {
               <input
                 type="file"
                 name="file"
-                onChange={(e) => setPortrait(e.target.value)}
+                onChange={(e) => setPortrait(e.target.files[0])}
               />
             </div>
             <div>

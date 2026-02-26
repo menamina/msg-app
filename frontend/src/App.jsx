@@ -21,7 +21,10 @@ function App() {
       }
 
       setUser(data.user);
-      navigate("/hub");
+      const path = window.location.pathname;
+      if (path === "/" || path === "/login" || path === "/signup") {
+        navigate("/hub");
+      }
       return;
     }
     checkIfSession();
@@ -39,8 +42,10 @@ function App() {
         if (!res.ok) {
           return console.log("something");
         }
-        setUserProfile(data.userInfo.profile);
-        navigate("/hub");
+        const prof = Array.isArray(data.userInfo?.profile)
+          ? data.userInfo.profile[0] || null
+          : data.userInfo?.profile || null;
+        setUserProfile(prof);
       } catch (err) {
         console.log(err);
       }
