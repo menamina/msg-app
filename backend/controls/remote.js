@@ -287,7 +287,9 @@ async function getFriends(req, res) {
             name: true,
             username: true,
             profile: {
-              pfp: true,
+              select: {
+                pfp: true,
+              },
             },
           },
         },
@@ -317,7 +319,9 @@ async function getFriendReqs(req, res) {
             name: true,
             username: true,
             profile: {
-              pfp: true,
+              select: {
+                pfp: true,
+              },
             },
           },
         },

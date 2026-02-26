@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link, useOutletContext, useNavigate } from "react-router-dom";
 
 function Contacts() {
   const [contacts, setContacts] = useState([]);

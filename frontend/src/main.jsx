@@ -10,6 +10,7 @@ import Contacts from "./components/contacts";
 import FriendReq from "./components/friendReq";
 import NewMsg from "./components/newMsg";
 import Settings from "./components/settings";
+import Chat from "./components/chat";
 
 const routes = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const routes = createBrowserRouter([
         path: "/hub",
         element: <Hub />,
         children: [
+          { index: true, element: <Chat /> },
           { path: "contacts", element: <Contacts /> },
           { path: "friend-requests", element: <FriendReq /> },
           { path: "new", element: <NewMsg /> },

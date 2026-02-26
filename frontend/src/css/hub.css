@@ -7,18 +7,12 @@
   padding: 20px;
 }
 
-.sideBar-Msgs,
+.sidebar-Msgs,
 .nav-profile,
 .userNav,
 .sideBar,
 .navRight {
   display: flex;
-}
-
-.sideBar-Msgs {
-  flex: 1;
-  align-items: stretch;
-  min-height: 0;
 }
 
 .userNav {
