@@ -358,7 +358,7 @@ async function requestFriend(req, res) {
 
     const id = Number(req.user.id);
 
-    const existingReq = await prisma.friendReq.findFirst({
+    const existingReq = await prisma.friends.findFirst({
       where: {
         OR: [
           { sentBy: id, sentTo: foundUserWUsername.id },
@@ -452,29 +452,27 @@ async function deleteFriend(req, res) {
     const { deleteThisID } = req.body;
     const loggedInUserID = Number(req.user.id);
     const ID = Number(deleteThisID);
-    // Remove friendship in both directions (skipDuplicates handled by deleteMany)
-    await prisma.friends.deleteMany({
+    await prisma.friends.delete({
       where: {
-        OR: [
-          { ownerID: loggedInUserID, contactID: ID },
-          { ownerID: ID, contactID: loggedInUserID },
-        ],
+        ownerID_contactID: {
+          ownerID: loggedInUserID,
+          contactID: ID,
+        },
       },
     });
 
-    // Also remove any pending friend requests between the two users
-    await prisma.friendReq.deleteMany({
+    await prisma.friendReq.delete({
       where: {
-        OR: [
-          { sentBy: loggedInUserID, sentTo: ID },
-          { sentBy: ID, sentTo: loggedInUserID },
-        ],
+        sentTo_sentBy: {
+          sentTo: loggedInUserID,
+          sentBy: ID,
+        },
       },
     });
-
     return res.status(200).json({ message: true });
   } catch (error) {
     res.status(500).json({ error: "cannot delete friend" });
+    console.log(error);
   }
 }
 
@@ -575,6 +573,7 @@ async function sideBarChatSearch(req, res) {
 
 async function friendSearch(req, res) {
   try {
+    const authUserId = Number(req.user.id);
     const { query } = req.query;
     const results = await prisma.user.findMany({
       where: {
@@ -597,7 +596,40 @@ async function friendSearch(req, res) {
     if (!results) {
       return res.status(403).json({ noUsersFound: "No user(s) found" });
     }
-    return res.json({ friendSearchRes: results });
+
+    const enriched = await Promise.all(
+      results.map(async (u) => {
+        if (u.id === authUserId) return { ...u, friendStatus: "self" };
+
+        const friend = await prisma.friends.findFirst({
+          where: {
+            OR: [
+              { ownerID: authUserId, contactID: u.id },
+              { ownerID: u.id, contactID: authUserId },
+            ],
+          },
+        });
+        if (friend) return { ...u, friendStatus: "friend" };
+
+        const pending = await prisma.friendReq.findFirst({
+          where: {
+            OR: [
+              { sentBy: authUserId, sentTo: u.id, accepted: false },
+              { sentBy: u.id, sentTo: authUserId, accepted: false },
+            ],
+          },
+        });
+
+        if (pending) {
+          const status = pending.sentBy === authUserId ? "sent" : "received";
+          return { ...u, friendStatus: status };
+        }
+
+        return { ...u, friendStatus: "none" };
+      }),
+    );
+
+    return res.json({ friendSearchRes: enriched });
   } catch (error) {
     return res.status(500).json({ message: "cannot search for friends atm" });
   }

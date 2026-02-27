@@ -32,7 +32,7 @@ function Contacts() {
   async function deleteFriend(contactID) {
     try {
       const res = await fetch("http://localhost:5555/dltFriend", {
-        method: "GET",
+        method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
