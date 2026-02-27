@@ -481,7 +481,7 @@ async function updateProfile(req, res) {
     const id = req.user.id;
     const idNum = Number(id);
     const { name, email, currentPass, newPassword } = req.body;
-    const { pfp } = req.file;
+    const pfpFile = req.file?.filename;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -503,19 +503,20 @@ async function updateProfile(req, res) {
 
       const approvedPass = await createPassword.createPassword(newPassword);
 
+      const dataToUpdate = {
+        name,
+        email,
+        saltedHash: approvedPass,
+      };
+      if (pfpFile) {
+        dataToUpdate.profile = {
+          update: { pfp: pfpFile },
+        };
+      }
+
       const updateUser = await prisma.user.update({
         where: { id: idNum },
-        data: {
-          name: name,
-          email: email,
-          saltedHash: approvedPass,
-
-          profile: {
-            update: {
-              pfp: pfp.filename,
-            },
-          },
-        },
+        data: dataToUpdate,
       });
 
       return res
@@ -523,25 +524,22 @@ async function updateProfile(req, res) {
         .json({ user: updateUser, profile: updateUser.profile });
     }
 
+    const dataToUpdate = { name, email };
+    if (pfpFile) {
+      dataToUpdate.profile = { update: { pfp: pfpFile } };
+    }
+
     const updateUser = await prisma.user.update({
       where: { id: idNum },
-      data: {
-        name: name,
-        email: email,
-
-        profile: {
-          update: {
-            pfp: pfp,
-          },
-        },
-      },
+      data: dataToUpdate,
     });
 
     return res
       .status(200)
       .json({ user: updateUser, profile: updateUser.profile });
   } catch (error) {
-    something;
+    console.log("updateProfile error:", error.message);
+    return res.status(500).json({ message: "failed to update profile" });
   }
 }
 
