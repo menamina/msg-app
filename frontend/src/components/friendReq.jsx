@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link, useOutletContext } from "react-router-dom";
 
 function FriendReq() {
   const [friendRequests, setFriendRequests] = useState([]);
@@ -27,25 +26,28 @@ function FriendReq() {
     getFriendReqs();
   }, []);
 
+  const defaultPfp = "http://localhost:5555/pfpIMG/default-avatar.png";
+
   async function handleReqAction(e) {
     e.preventDefault();
 
-    const action = e.nativeEvent.submitter;
-    const requestId = e.currentTarget.dataset.id;
+    const action = e.nativeEvent.submitter.value;
+    const requestId = Number(e.currentTarget.dataset.id);
 
-    if (action === "add") {
+    if (action === "add" && requestId) {
       try {
         const res = await fetch("http://localhost:5555/acceptFriendReq", {
           method: "PATCH",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: {
+          body: JSON.stringify({
             friendToAccept: requestId,
-          },
+          }),
         });
         if (res.ok) {
           const filteredReqs = friendRequests.filter(
-            (personWhoWantsToAddME) => personWhoWantsToAddME.id !== requestId,
+            (personWhoWantsToAddME) =>
+              personWhoWantsToAddME.whoSent.id !== requestId,
           );
           setFriendRequests(filteredReqs);
           return;
@@ -55,19 +57,20 @@ function FriendReq() {
       }
     }
 
-    if (action === "deny") {
+    if (action === "deny" && requestId) {
       try {
         const res = await fetch("http://localhost:5555/denyFriendReq", {
           method: "DELETE",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: {
+          body: JSON.stringify({
             friendToDeny: requestId,
-          },
+          }),
         });
         if (res.ok) {
           const filteredReqs = friendRequests.filter(
-            (personWhoWantsToAddME) => personWhoWantsToAddME.id !== requestId,
+            (personWhoWantsToAddME) =>
+              personWhoWantsToAddME.whoSent.id !== requestId,
           );
           setFriendRequests(filteredReqs);
           return;
@@ -86,18 +89,33 @@ function FriendReq() {
         <div>
           {friendRequests.map((request) => {
             return (
-              <div>
+              <div key={request.id}>
                 <div>
-                  <img>{request.profile.pfp}</img>
+                  <img
+                    className="pfp"
+                    src={
+                      request.whoSent?.profile?.pfp
+                        ? `http://localhost:5555/pfpIMG/${request.whoSent.profile.pfp}`
+                        : defaultPfp
+                    }
+                    alt={`${request.whoSent?.name || "user"} profile`}
+                  />
                 </div>
                 <div>
-                  <p>{request.name}</p>
-                  <p>@{request.username}</p>
+                  <p>{request.whoSent?.name}</p>
+                  <p>@{request.whoSent?.username}</p>
                 </div>
                 <div>
-                  <form onSubmit={handleReqAction} data-id={request.id}>
-                    <button value="add">add</button>
-                    <button value="deny">deny</button>
+                  <form
+                    onSubmit={handleReqAction}
+                    data-id={request.whoSent?.id}
+                  >
+                    <button type="submit" value="add">
+                      add
+                    </button>
+                    <button type="submit" value="deny">
+                      deny
+                    </button>
                   </form>
                 </div>
               </div>
