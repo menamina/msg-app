@@ -358,7 +358,7 @@ async function requestFriend(req, res) {
 
     const id = Number(req.user.id);
 
-    const existingReq = await prisma.friends.findFirst({
+    const existingReq = await prisma.friendReq.findFirst({
       where: {
         OR: [
           { sentBy: id, sentTo: foundUserWUsername.id },
@@ -452,21 +452,21 @@ async function deleteFriend(req, res) {
     const { deleteThisID } = req.body;
     const loggedInUserID = Number(req.user.id);
     const ID = Number(deleteThisID);
-    await prisma.friends.delete({
+    await prisma.friends.deleteMany({
       where: {
-        ownerID_contactID: {
-          ownerID: loggedInUserID,
-          contactID: ID,
-        },
+        OR: [
+          { ownerID: loggedInUserID, contactID: ID },
+          { ownerID: ID, contactID: loggedInUserID },
+        ],
       },
     });
 
-    await prisma.friendReq.delete({
+    await prisma.friendReq.deleteMany({
       where: {
-        sentTo_sentBy: {
-          sentTo: loggedInUserID,
-          sentBy: ID,
-        },
+        OR: [
+          { sentBy: loggedInUserID, sentTo: ID },
+          { sentBy: ID, sentTo: loggedInUserID },
+        ],
       },
     });
     return res.status(200).json({ message: true });
