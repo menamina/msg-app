@@ -22,6 +22,8 @@ function Hub() {
   const [msgSearchByContactResults, setMsgSearchByContactResults] = useState(
     [],
   );
+  const [friends, setFriends] = useState([]);
+  const [sentReqs, setSentReqs] = useState([]);
 
   useEffect(() => {
     if (!user) {
@@ -98,6 +100,43 @@ function Hub() {
     }, 300);
     return () => clearTimeout(timeout);
   }, [userSearch]);
+
+  useEffect(() => {
+    async function loadFriends() {
+      try {
+        const res = await fetch("http://localhost:5555/getFriends", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setFriends(data.friends || []);
+        } else {
+          setFriends([]);
+        }
+      } catch {
+        setFriends([]);
+      }
+    }
+    async function loadSent() {
+      try {
+        const res = await fetch("http://localhost:5555/sentFriendReqs", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setSentReqs(data.sent || []);
+        } else {
+          setSentReqs([]);
+        }
+      } catch {
+        setSentReqs([]);
+      }
+    }
+    loadFriends();
+    loadSent();
+  }, []);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -366,7 +405,9 @@ function Hub() {
               <div>
                 {userSearchResults.map((result) => (
                   <div key={result.id} className="userSearchResult">
-                    <form onSubmit={(e) => sendFriendReq(e, result.username)}>
+                    <form
+                      onSubmit={(e) => sendFriendReq(e, result.username)}
+                    >
                       <div>
                         <div>
                           <img
@@ -387,9 +428,13 @@ function Hub() {
                       </div>
 
                       <div>
-                        {result.id === user.id ? null : (
-                          <button type="submit">add</button>
-                        )}
+                        {result.id === user.id
+                          ? null
+                          : friends.some((f) => f.contactID === result.id)
+                            ? "Friends"
+                            : sentReqs.some((r) => r.sentTo === result.id)
+                              ? "Request sent"
+                              : <button type="submit">add</button>}
                       </div>
                     </form>
                   </div>

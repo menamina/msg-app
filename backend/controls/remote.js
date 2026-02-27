@@ -452,14 +452,26 @@ async function deleteFriend(req, res) {
     const { deleteThisID } = req.body;
     const loggedInUserID = Number(req.user.id);
     const ID = Number(deleteThisID);
-    await prisma.friends.delete({
+    // Remove friendship in both directions (skipDuplicates handled by deleteMany)
+    await prisma.friends.deleteMany({
       where: {
-        ownerID_contactID: {
-          ownerID: loggedInUserID,
-          contactID: ID,
-        },
+        OR: [
+          { ownerID: loggedInUserID, contactID: ID },
+          { ownerID: ID, contactID: loggedInUserID },
+        ],
       },
     });
+
+    // Also remove any pending friend requests between the two users
+    await prisma.friendReq.deleteMany({
+      where: {
+        OR: [
+          { sentBy: loggedInUserID, sentTo: ID },
+          { sentBy: ID, sentTo: loggedInUserID },
+        ],
+      },
+    });
+
     return res.status(200).json({ message: true });
   } catch (error) {
     res.status(500).json({ error: "cannot delete friend" });
