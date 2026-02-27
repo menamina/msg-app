@@ -357,7 +357,7 @@ async function requestFriend(req, res) {
     }
 
     const id = Number(req.user.id);
-    await prisma.friendreq.create({
+    await prisma.friendReq.create({
       data: {
         sentBy: id,
         sentTo: foundUserWUsername.id,
@@ -373,10 +373,12 @@ async function acceptFriend(req, res) {
   try {
     const { friendToAccept } = req.body;
     const acceptFriend = Number(friendToAccept);
-    await prisma.friendreq.update({
+    await prisma.friendReq.update({
       where: {
-        sentBy: acceptFriend,
-        sentTo: req.user.id,
+        sentBy_sentTo: {
+          sentBy: acceptFriend,
+          sentTo: req.user.id,
+        },
       },
       data: {
         accepted: true,
@@ -400,10 +402,12 @@ async function denyFriend(req, res) {
   try {
     const { friendToDeny } = req.body;
     const denyFriendNum = Number(friendToDeny);
-    await prisma.friendreq.delete({
+    await prisma.friendReq.delete({
       where: {
-        sentBy: denyFriendNum,
-        sentTo: req.user.id,
+        sentBy_sentTo: {
+          sentBy: denyFriendNum,
+          sentTo: req.user.id,
+        },
       },
     });
 
@@ -420,8 +424,10 @@ async function deleteFriend(req, res) {
     const ID = Number(deleteThisID);
     await prisma.friends.delete({
       where: {
-        ownerId: loggedInUserID,
-        contactId: ID,
+        ownerID_contactID: {
+          ownerID: loggedInUserID,
+          contactID: ID,
+        },
       },
     });
     return res.status(200).json({ message: true });
