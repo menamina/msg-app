@@ -146,16 +146,9 @@ async function getSideBar(req, res) {
     const conversations = [];
 
     messages.forEach((msg) => {
-      const otherUser = msg.from === userId ? msg.from : msg.to;
-
-      const exists = conversations.find((other) => other.id === otherUser.id);
-
-      if (!exists) {
-        conversations.push({
-          id: otherUser.id,
-          name: otherUser.name,
-        });
-      }
+      const otherUserObj = msg.from === userId ? msg.toUser : msg.fromUser;
+      const exists = conversations.find((other) => other.id === otherUserObj.id);
+      if (!exists && otherUserObj) conversations.push(otherUserObj);
     });
 
     return res.json({ conversations });
@@ -170,7 +163,7 @@ async function getMsgs(req, res) {
     const userID = Number(req.user.id);
     const { friendID } = req.body;
     const friendIDNum = Number(friendID);
-    const msgs = await prisma.message.findMany({
+  const msgs = await prisma.message.findMany({
       where: {
         OR: [
           { from: friendIDNum, to: userID },
@@ -191,11 +184,12 @@ async function getMsgs(req, res) {
           select: { id: true, name: true },
         },
       },
-    });
-    res.json({ one2one: msgs, friendID: friendID });
-  } catch (error) {
-    something;
-  }
+  });
+  res.json({ one2one: msgs, friendID: friendID });
+} catch (error) {
+  console.log("getMsgs error:", error.message);
+  return res.status(500).json({ message: "cannot load messages" });
+}
 }
 
 async function getConvo(req, res) {
@@ -220,7 +214,7 @@ async function getConvo(req, res) {
 async function sendMsg(req, res) {
   try {
     const { sendTo, message } = req.body;
-    const { fileOrImg } = req.file;
+    const fileName = req.file?.filename || null;
     const id = Number(req.user.id);
     const sendToNum = Number(sendTo);
     await prisma.message.create({
@@ -228,13 +222,14 @@ async function sendMsg(req, res) {
         from: id,
         to: sendToNum,
         message: message,
-        file: fileOrImg ? fileOrImg.filename : null,
+        file: fileName,
       },
     });
 
     res.status(200).json({ msg: true });
   } catch (error) {
-    something;
+    console.log("sendMsg error:", error.message);
+    return res.status(500).json({ message: "failed to send message" });
   }
 }
 

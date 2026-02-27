@@ -1,6 +1,10 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useOutletContext,
+} from "react-router-dom";
 import App from "./App";
 import Index from "./components/index";
 import Login from "./components/login";
@@ -11,6 +15,11 @@ import FriendReq from "./components/friendReq";
 import NewMsg from "./components/newMsg";
 import Settings from "./components/settings";
 import Chat from "./components/chat";
+
+function HubChatRoute() {
+  const { user, activeChatUser } = useOutletContext();
+  return <Chat user={user} activeChatUser={activeChatUser} />;
+}
 
 const routes = createBrowserRouter([
   {
@@ -24,7 +33,7 @@ const routes = createBrowserRouter([
         path: "/hub",
         element: <Hub />,
         children: [
-          { index: true, element: <Chat /> },
+          { index: true, element: <HubChatRoute /> },
           { path: "friend-requests", element: <FriendReq /> },
           { path: "new", element: <NewMsg /> },
           { path: "settings", element: <Settings /> },

@@ -81,7 +81,7 @@ function NewMsg() {
       </div>
 
       <div className="chatWrapper">
-        <Chat activeChatUser={selectedUserId} />
+        <Chat user={user} activeChatUser={selectedUserId} />
       </div>
     </div>
   );

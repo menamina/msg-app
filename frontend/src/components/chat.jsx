@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
 
-function Chat() {
-  const { user, activeChatUser } = useOutletContext();
+function Chat({ user, activeChatUser }) {
+  if (!user) return null;
 
   const [convoMsg, setConvoMsg] = useState([]);
   const [sendToUser, setSendToUser] = useState(null);

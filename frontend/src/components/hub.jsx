@@ -346,8 +346,7 @@ function Hub() {
               : sideBar.length === 0
                 ? null
                 : sideBar.map((convo) => {
-                    const keyID =
-                      convo.from === user.id ? convo.to : convo.from;
+                    const keyID = convo.id;
                     return (
                       <div
                         key={keyID}
@@ -358,16 +357,12 @@ function Hub() {
                           <div>
                             <img
                               className="pfp"
-                              src={
-                                convo.profile?.pfp
-                                  ? `http://localhost:5555/pfpIMG/${convo.profile.pfp}`
-                                  : defaultPfp
-                              }
+                              src={defaultPfp}
                               alt="profile"
                             />
                           </div>
                         </div>
-                        <div>{convo.toUser.name}</div>
+                        <div>{convo.name}</div>
                       </div>
                     );
                   })}
