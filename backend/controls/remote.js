@@ -503,16 +503,19 @@ async function updateProfile(req, res) {
 
       const approvedPass = await createPassword.createPassword(newPassword);
 
-      const dataToUpdate = {
-        name,
-        email,
-        saltedHash: approvedPass,
+    const dataToUpdate = {
+      name,
+      email,
+      saltedHash: approvedPass,
+    };
+    if (pfpFile) {
+      dataToUpdate.profile = {
+        update: {
+          where: { user: idNum },
+          data: { pfp: pfpFile },
+        },
       };
-      if (pfpFile) {
-        dataToUpdate.profile = {
-          update: { pfp: pfpFile },
-        };
-      }
+    }
 
       const updateUser = await prisma.user.update({
         where: { id: idNum },
@@ -524,10 +527,15 @@ async function updateProfile(req, res) {
         .json({ user: updateUser, profile: updateUser.profile });
     }
 
-    const dataToUpdate = { name, email };
-    if (pfpFile) {
-      dataToUpdate.profile = { update: { pfp: pfpFile } };
-    }
+  const dataToUpdate = { name, email };
+  if (pfpFile) {
+    dataToUpdate.profile = {
+      update: {
+        where: { user: idNum },
+        data: { pfp: pfpFile },
+      },
+    };
+  }
 
     const updateUser = await prisma.user.update({
       where: { id: idNum },
