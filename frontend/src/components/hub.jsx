@@ -134,11 +134,18 @@ function Hub() {
     return () => clearTimeout(timeout);
   }, [msgSearchByContact]);
 
+  function closeOverlays() {
+    setShowOpts(false);
+    setShowFriendSearch(false);
+  }
+
   function profileOpts() {
+    setShowFriendSearch(false);
     setShowOpts((prev) => !prev);
   }
 
   function openFriendSearchBar() {
+    setShowOpts(false);
     setShowFriendSearch((prev) => !prev);
   }
 
@@ -247,7 +254,9 @@ function Hub() {
         <div className="sideBar">
           <div>
             <div>
-              <Link to="/hub/new">new message</Link>
+              <Link to="/hub/new" onClick={closeOverlays}>
+                new message
+              </Link>
             </div>
           </div>
           <div>
@@ -261,6 +270,7 @@ function Hub() {
               name="search chats by user"
               placeholder="Search"
               value={msgSearchByContact}
+              onFocus={closeOverlays}
               onChange={(e) => setMsgSearchByContact(e.target.value)}
             ></input>
           </div>

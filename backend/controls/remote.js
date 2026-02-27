@@ -329,7 +329,7 @@ async function getFriendReqs(req, res) {
     });
     if (returnedReqs.length === 0) {
       return res
-        .status(403)
+        .status(404)
         .json({ message: "You have no friend requests :(" });
     }
     return res.json({ requests: returnedReqs, success: true });
@@ -357,6 +357,34 @@ async function requestFriend(req, res) {
     }
 
     const id = Number(req.user.id);
+
+    const existingReq = await prisma.friendReq.findFirst({
+      where: {
+        OR: [
+          { sentBy: id, sentTo: foundUserWUsername.id },
+          { sentBy: foundUserWUsername.id, sentTo: id },
+        ],
+      },
+    });
+    if (existingReq) {
+      const alreadyFriendsMsg = existingReq.accepted
+        ? "You are already friends"
+        : "Friend request already pending";
+      return res.status(409).json({ message: alreadyFriendsMsg });
+    }
+
+    const existingFriend = await prisma.friends.findFirst({
+      where: {
+        OR: [
+          { ownerID: id, contactID: foundUserWUsername.id },
+          { ownerID: foundUserWUsername.id, contactID: id },
+        ],
+      },
+    });
+    if (existingFriend) {
+      return res.status(409).json({ message: "You are already friends" });
+    }
+
     await prisma.friendReq.create({
       data: {
         sentBy: id,
@@ -365,7 +393,8 @@ async function requestFriend(req, res) {
     });
     return res.status(200).json({ message: true });
   } catch (error) {
-    res.status(500).json({ message: "something went wrong; 500 error" });
+    console.log("requestFriend error:", error.message);
+    res.status(500).json({ message: "Could not send friend request" });
   }
 }
 

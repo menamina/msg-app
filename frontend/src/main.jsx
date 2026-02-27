@@ -25,10 +25,10 @@ const routes = createBrowserRouter([
         element: <Hub />,
         children: [
           { index: true, element: <Chat /> },
-          { path: "contacts", element: <Contacts /> },
           { path: "friend-requests", element: <FriendReq /> },
           { path: "new", element: <NewMsg /> },
           { path: "settings", element: <Settings /> },
+          { path: "contacts", element: <Contacts /> },
         ],
       },
     ],
