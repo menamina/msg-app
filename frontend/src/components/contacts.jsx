@@ -59,13 +59,14 @@ function Contacts() {
       {noFriends && <div>{noFriends}</div>}
       {contacts && (
         <div>
-          {contacts.map((contact) => {
+          {contacts.map((contact) => (
             <div key={contact.contactID}>
               <div>
                 <div>
                   <img
                     src={`http://localhost:5555/pfpIMG/${contact.contact.profile.pfp}`}
-                  ></img>
+                    alt={`${contact.contact.name} profile`}
+                  />
                 </div>
                 <div>
                   <div>{contact.contact.name}</div>
@@ -78,8 +79,8 @@ function Contacts() {
                   delete friend
                 </div>
               </div>
-            </div>;
-          })}
+            </div>
+          ))}
         </div>
       )}
     </div>

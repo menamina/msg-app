@@ -414,11 +414,12 @@ async function acceptFriend(req, res) {
       },
     });
 
-    await prisma.friends.create({
-      data: {
-        ownerID: req.user.id,
-        contactID: acceptFriend,
-      },
+    await prisma.friends.createMany({
+      data: [
+        { ownerID: req.user.id, contactID: acceptFriend },
+        { ownerID: acceptFriend, contactID: req.user.id },
+      ],
+      skipDuplicates: true,
     });
 
     return res.json({ success: true });
