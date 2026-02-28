@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
+import "../css/loginSignup.css";
 
 function Signup() {
   const { user } = useOutletContext();
@@ -111,7 +112,7 @@ function Signup() {
             onChange={(e) => setConfirmPass(e.target.value)}
           />
         </div>
-        <button class="signBtn">sign up</button>
+        <button className="signBtn">sign up</button>
       </form>
       <div>
         <div>Already have an account?</div>
