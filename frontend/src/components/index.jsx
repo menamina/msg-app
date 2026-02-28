@@ -11,10 +11,12 @@ function Index() {
       </div>
 
       <div>
-        <Link to="/signup">Sign up</Link> today
-      </div>
-      <div>
-        Or if you already have an account, <Link to="/login">login</Link>
+        <div>
+          <Link to="/signup">Sign up</Link> today
+        </div>
+        <div>
+          Or if you already have an account, <Link to="/login">login</Link>
+        </div>
       </div>
     </div>
   );
