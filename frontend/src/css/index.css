@@ -18,6 +18,8 @@
   background-image: url("../imgs/stars2.jpg");
   color: white;
   padding: 40px;
+  padding-top: 100px;
+  padding-bottom: 100px;
 }
 
 .index a,
@@ -25,8 +27,18 @@
   color: white;
 }
 
+.welcome > div:first-of-type {
+  font-size: 2.5rem;
+}
+
+.welcome > div:not(:first-child),
+.right {
+  font-size: 1.2rem;
+}
+
 .right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  text-align: center;
 }
