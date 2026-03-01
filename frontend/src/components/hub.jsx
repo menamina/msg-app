@@ -279,14 +279,20 @@ function Hub() {
                   <div>@{user.name}</div>
                   <div>{user.email}</div>
                   <div>
-                    <Link to="/hub/settings">settings</Link>
+                    <Link to="/hub/settings" onClick={profileOpts}>
+                      settings
+                    </Link>
                   </div>
                 </div>
               </div>
               <div>
-                <Link to="/hub/contacts">contacts</Link>
+                <Link to="/hub/contacts" onClick={profileOpts}>
+                  contacts
+                </Link>
               </div>
-              <div onClick={logout}>logout</div>
+              <div onClick={logout} className="onHover">
+                logout
+              </div>
             </div>
           ) : null}
         </div>
