@@ -1,7 +1,14 @@
 const request = require("supertest");
 const app = require("./app");
 
-test("that you can sign up", async () => {});
-test("that you can login", async () => {});
-test("that you can logout", async () => {});
-test("that you can find a session", async () => {});
+test("can sign up", async () => {});
+test("can login", async () => {});
+test("can logout", async () => {});
+test("can find a session", async () => {});
+
+test("can get hub", async () => {});
+test("can get messages", async () => {});
+test("can send messages", async () => {});
+test("can delete messages", async () => {});
+
+test("can send friend req", async () => {});
