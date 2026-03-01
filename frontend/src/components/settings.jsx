@@ -123,7 +123,9 @@ function Settings() {
               </div>
             </div>
             <div>
-              <div onClick={cancelUpdate}>cancel</div>
+              <div onClick={cancelUpdate} className="onHover">
+                cancel
+              </div>
               <button>save</button>
             </div>
           </form>

@@ -400,7 +400,9 @@ function Hub() {
               placeholder="Search.."
             ></input>
             <div>
-              <button onClick={clearUserSearch}>cancel</button>
+              <button onClick={clearUserSearch} className="onHover">
+                cancel
+              </button>
             </div>
           </div>
           <div className="searchResults">
