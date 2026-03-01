@@ -67,3 +67,7 @@
 .searchMsgs {
   width: 90%;
 }
+
+.onHover {
+  cursor: pointer;
+}

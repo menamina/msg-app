@@ -268,7 +268,9 @@ function Hub() {
           </div>
           <div className="nav-profile">
             <img src={pfpSrc} alt="your profile image" className="pfp" />
-            <p onClick={profileOpts}>{user ? user.name : null}</p>
+            <p onClick={profileOpts} className="onHover">
+              {user ? user.name : null}
+            </p>
           </div>
           {showOpts ? (
             <div className="dropDown">
@@ -299,7 +301,7 @@ function Hub() {
             </div>
           </div>
           <div>
-            <div onClick={openFriendSearchBar}>
+            <div className="onHover" onClick={openFriendSearchBar}>
               find your friends in cyberspace
             </div>
           </div>
@@ -400,9 +402,7 @@ function Hub() {
               <div>
                 {userSearchResults.map((result) => (
                   <div key={result.id} className="userSearchResult">
-                    <form
-                      onSubmit={(e) => sendFriendReq(e, result.username)}
-                    >
+                    <form onSubmit={(e) => sendFriendReq(e, result.username)}>
                       <div>
                         <div>
                           <img
@@ -423,13 +423,15 @@ function Hub() {
                       </div>
 
                       <div>
-                        {result.id === user.id
-                          ? null
-                          : friends.some((f) => f.contactID === result.id)
-                            ? "Friends"
-                            : sentReqs.some((r) => r.sentTo === result.id)
-                              ? "Request sent"
-                              : <button type="submit">add</button>}
+                        {result.id === user.id ? null : friends.some(
+                            (f) => f.contactID === result.id,
+                          ) ? (
+                          "Friends"
+                        ) : sentReqs.some((r) => r.sentTo === result.id) ? (
+                          "Request sent"
+                        ) : (
+                          <button type="submit">add</button>
+                        )}
                       </div>
                     </form>
                   </div>
