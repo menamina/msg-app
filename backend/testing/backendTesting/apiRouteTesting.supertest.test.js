@@ -33,7 +33,7 @@ const request = require("supertest");
 const app = require("./app");
 
 test("can sign up", async () => {
-  const res = await request(app).post("/signUp").send({
+  const res = await request(app).post("/signup").send({
     name: "Mena",
     username: "menawena",
     email: "testing@testing.com",
@@ -61,7 +61,7 @@ test("can login", async () => {
 test("can logout", async () => {});
 
 test("can find a session", async () => {
-  const res = await request(app).get("/isThereAsession");
+  const res = await request(app).get("/isThereASession");
 
   expect(res.body).toEqual({
     user: {
@@ -83,11 +83,64 @@ test("can get hub", async () => {
   });
 });
 
-test("can get messages", async () => {});
-test("can send messages", async () => {});
-test("can delete messages", async () => {});
+test("can get messages", async () => {
+  const res = await request(app).post("/getMsgs").send({ friendID: 2 });
 
-test("can send friend req", async () => {});
-test("can accept friend req");
-test("can deny friend req");
-test("can delete friend");
+  expect(res.statusCode).toBe(200);
+  expect(res.body).toEqual({
+    msgs: [],
+  });
+});
+
+test("can send messages", async () => {
+  const res = await request(app)
+    .post("/sendMsg")
+    .send({ sendTo: 2, message: "hello" });
+
+  expect(res.statusCode).toBe(201);
+  expect(res.body).toEqual({
+    sent: true,
+  });
+});
+
+test("can delete messages", async () => {
+  const res = await request(app).patch("/dltMsg").send({ msgToDelete: 1 });
+
+  expect(res.statusCode).toBe(200);
+  expect(res.body).toEqual({
+    deleted: true,
+  });
+});
+
+test("can send friend req", async () => {
+  const res = await request(app)
+    .post("/sendFriendReq")
+    .send({ friendToAdd: "someone" });
+
+  expect(res.statusCode).toBe(200);
+  expect(res.body).toEqual({
+    sent: true,
+  });
+});
+
+test("can accept friend req", async () => {
+  const res = await request(app)
+    .patch("/acceptFriendReq")
+    .send({ friendToAccept: 2 });
+
+  expect(res.statusCode).toBe(200);
+});
+
+test("can deny friend req", async () => {
+  const res = await request(app)
+    .delete("/denyFriendReq")
+    .send({ friendToDeny: 2 });
+
+  expect(res.statusCode).toBe(200);
+});
+
+test("can delete friend", async () => {
+  const res = await request(app).post("/dltFriend").send({ deleteThisID: 2 });
+
+  expect(res.statusCode).toBe(200);
+});
